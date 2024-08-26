@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Button, Col, Container, Form, Row } from "react-bootstrap"
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap"
 import authServices from "../../services/auth.services"
 import DatePicker from "react-date-picker"
 import 'react-date-picker/dist/DatePicker.css'
@@ -18,6 +18,8 @@ const ProfileForm = () => {
     phone: "",
     birth: new Date()
   })
+
+  const [isLoadingData, setIsLoadingData] = useState(false)
 
   const fetchProfileData = () => {
 
@@ -49,11 +51,13 @@ const ProfileForm = () => {
 
   const handleFormSubmit = event => {
     event.preventDefault()
-
-
+    setIsLoadingData(true)
     authServices
       .updateUserProfile(profileData)
-      .then(() => fetchProfileData())
+      .then(() => {
+        setIsLoadingData(false)
+        fetchProfileData()
+      })
       .catch(err => console.log(err))
   }
 
@@ -61,6 +65,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     fetchProfileData()
+    //setIsLoadingData()
   }, [])
 
   return (
@@ -136,8 +141,23 @@ const ProfileForm = () => {
           </Col>
 
         </Row>
-
-        <Button variant="success" className="w-100" type="submit">Submit</Button>
+        {
+          isLoadingData
+            ?
+            <Button variant="success" className="w-100" disabled>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                className="me-2"
+              />
+              <span>Loading...</span>
+            </Button>
+            :
+            <Button variant="success" className="w-100" type="submit">Submit</Button>
+        }
 
       </Container>
 
