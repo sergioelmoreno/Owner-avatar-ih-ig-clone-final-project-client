@@ -65,7 +65,6 @@ const ProfileForm = () => {
 
   useEffect(() => {
     fetchProfileData()
-    //setIsLoadingData()
   }, [])
 
   return (

@@ -1,15 +1,15 @@
 import { Container } from "react-bootstrap"
 import NewPostForm from "../../components/NewPostForm/NewPostForm"
 
-const CreatePostPage = () => {
+const NewPostPage = () => {
 
   return (
     <Container>
-      <h1>Nuevo post</h1>
+      <h1>New post</h1>
       <hr />
       <NewPostForm />
     </Container>
   )
 }
 
-export default CreatePostPage
+export default NewPostPage

@@ -9,16 +9,21 @@ import { subtractYears } from "../../utils/date.utils"
 
 const SignupForm = () => {
 
+  const maxDate = subtractYears(new Date(), 18)
+
   const [signupData, setSignupData] = useState({
     firstname: "",
     lastname: "",
     nick: "",
     email: "",
     password: "",
-    avatar: "https://res.cloudinary.com/dkvtdgqxc/image/upload/v1724242583/person-circle_nda6qb.svg"
+    avatar: "https://res.cloudinary.com/dkvtdgqxc/image/upload/v1724242583/person-circle_nda6qb.svg",
+    birth: maxDate
   })
 
   const [birthData, setBirthData] = useState({ birth: new Date() })
+
+  const navigate = useNavigate()
 
   const handleInputChange = e => {
     const { value, name } = e.target
@@ -26,27 +31,22 @@ const SignupForm = () => {
   }
 
   const handleBirthData = date => {
-    setBirthData({ birth: date })
+    setSignupData({ ...signupData, birth: date })
   }
 
-  const navigate = useNavigate()
+  const handleFormSubmit = e => {
 
-  const handleFormSubmit = event => {
-    event.preventDefault()
-
-    const unifiedUserData = { ...signupData, ...birthData }
+    e.preventDefault()
 
     authServices
-      .signupUser(unifiedUserData)
+      .signupUser(signupData)
       .then(() => navigate('/login'))
       .catch(err => console.log(err))
   }
 
-  const maxDate = subtractYears(new Date(), 18)
-
   return (
 
-    <Form onSubmit={handleFormSubmit} className="SignupForm">
+    <Form onSubmit={handleFormSubmit} className="SignupForm" >
 
       <Container fluid>
 
@@ -97,9 +97,7 @@ const SignupForm = () => {
           <Col md={4}>
             <Form.Group>
               <Form.Label>Birthday:<sup>*</sup></Form.Label>
-              <div>
-                <DatePicker value={birthData.birth} name="birth" onChange={handleBirthData} maxDate={maxDate} required />
-              </div>
+              <Form.Control as={DatePicker} value={birthData.birth} name="birth" onChange={handleBirthData} maxDate={maxDate} required />
               <Form.Text className="text-muted">
                 Restrict to users 18 years and older
               </Form.Text>

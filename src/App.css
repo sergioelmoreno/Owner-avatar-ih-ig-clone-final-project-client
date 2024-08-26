@@ -1,0 +1,15 @@
+:root {
+  --clr-red: #a92835;
+}
+
+.react-date-picker__wrapper {
+  border: 0 !important;
+}
+
+.react-date-picker__button svg {
+  stroke: #fff;
+}
+
+.react-calendar {
+  background-color: #212529 !important;
+}

@@ -4,7 +4,7 @@ import './Carousel.css'
 const CostumCarousel = ({ images, postId }) => {
 
   return (
-    <Carousel className="Carousel">
+    <Carousel className="Carousel" aspectRatio="16x9">
       {
         images.map((eachImage, idx) => {
           return (

@@ -10,7 +10,7 @@ const Navigation = () => {
   const { loggedUser, logoutUser } = useContext(AuthContext)
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary Navigation">
+    <Navbar expand="lg" className="bg-body-tertiary Navigation mb-3">
       <Container fluid>
 
         <Navbar.Brand as={Link} to={"/"} className="align-self-start">IGclone</Navbar.Brand>
@@ -42,7 +42,7 @@ const Navigation = () => {
                 ?
                 <>
                   <Nav className="me-3">
-                    <Nav.Link as={Link} to={'/create-post'}>New Post</Nav.Link>
+                    <Nav.Link as={Link} to={'/posts/new'}>New Post</Nav.Link>
                   </Nav>
                   <Nav className="me-3">
                     <Nav.Link as={Link} onClick={logoutUser}>Logout</Nav.Link>

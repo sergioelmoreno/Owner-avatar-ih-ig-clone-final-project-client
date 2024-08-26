@@ -5,7 +5,7 @@ class PostsServices {
   constructor() {
 
     this.axiosApp = axios.create({
-      baseURL: `${import.meta.env.VITE_APP_API_URL}/api`
+      baseURL: `${import.meta.env.VITE_APP_API_URL}/api/posts`
     })
 
     this.axiosApp.interceptors.request.use(config => {
@@ -21,14 +21,25 @@ class PostsServices {
   }
 
   savePost(postData) {
-    return this.axiosApp.post(`/posts`, postData)
+    return this.axiosApp.post(`/new`, postData)
 
   }
 
   getAllPosts() {
-    return this.axiosApp.get(`/posts`)
+    return this.axiosApp.get(``)
   }
 
+  getPost(postId) {
+    return this.axiosApp.get(`/${postId}`)
+  }
+
+  editPost(postId) {
+    return this.axiosApp.put(`/edit/${postId}`)
+  }
+
+  deletePost(postId) {
+    return this.axiosApp.delete(`/delete/${postId}`)
+  }
 }
 
 
