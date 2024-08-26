@@ -14,9 +14,9 @@ const AppRoutes = () => {
     <div className="AppRoutes">
       <Routes>
         <Route path={'/'} element={<PostsPage />} />
-        <Route path={"/create-post"} element={<CreatePostPage />} />
-        <Route path={"/signup"} element={<SignupPage />} />
-        <Route path={"/login"} element={<LoginPage />} />
+        <Route path={'/create-post'} element={<CreatePostPage />} />
+        <Route path={'/signup'} element={<SignupPage />} />
+        <Route path={'/login'} element={<LoginPage />} />
         <Route path={'*'} element={<NotFoundPage />} />
 
         <Route element={<PrivateRoutes />}>
