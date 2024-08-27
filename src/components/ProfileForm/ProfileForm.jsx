@@ -1,12 +1,13 @@
-import { useContext, useEffect, useState } from "react"
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap"
-import authServices from "../../services/auth.services"
-import DatePicker from "react-date-picker"
 import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
+import { useContext, useEffect, useState } from "react"
+import { Button, Col, Form, Row, Spinner } from "react-bootstrap"
 import { subtractYears } from "../../utils/date.utils"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../contexts/auth.context"
+import authServices from "../../services/auth.services"
+import DatePicker from "react-date-picker"
+import NewImageForm from "../NewImageForm/NewImageForm"
 
 const ProfileForm = () => {
 
@@ -25,6 +26,8 @@ const ProfileForm = () => {
 
   const { loggedUser, logoutUser } = useContext(AuthContext)
 
+  const [imageData, setImageData] = useState([])
+
   const navigate = useNavigate()
 
   const fetchProfileData = () => {
@@ -42,8 +45,12 @@ const ProfileForm = () => {
     setProfileData({ ...profileData, [name]: value })
   }
 
-  const handleDatePost = date => {
+  const handleDate = date => {
     setProfileData({ ...profileData, date })
+  }
+
+  const populateImageData = () => {
+    setProfileData({ ...profileData, avatar: imageData })
   }
 
   const handleFormSubmit = e => {
@@ -88,10 +95,14 @@ const ProfileForm = () => {
     fetchProfileData()
   }, [])
 
+  useEffect(() => {
+    populateImageData()
+  }, [imageData])
+
   return (
 
     <Form onSubmit={handleFormSubmit} className="ProfileForm">
-      {/* TODO: Check the console error! */}
+
       <Row className="mb-3">
 
         <Col md={6}>
@@ -136,21 +147,18 @@ const ProfileForm = () => {
           </Form.Group>
         </Col>
 
-        <Col md={6}>
-          <div className="d-flex align-items-center">
-            <img src={profileData.avatar} alt={profileData.nick} className="flex-1" />
-            {/* TODO: Add Uploader */}
-            <Form.Group>
-              <Form.Label>Avatar:</Form.Label>
-              <Form.Control type="text" value={profileData.avatar} name="avatar" onChange={handleInputChange}></Form.Control>
-            </Form.Group>
-          </div>
+        <Col md={6} className="d-flex align-items-center justify-content-stretch">
+          {/* TODO: Change the avatar at the loggedUser payload */}
+          <img src={profileData.avatar} alt={profileData.nick} className="user-avatar me-2" />
+          <span className="flex-grow-1">
+            <NewImageForm setImageData={setImageData} imageData={imageData} defaultUrl={profileData.avatar} labelText={'Avatar'} max={1} />
+          </span>
         </Col>
 
         <Col md={6}>
           <Form.Group>
             <Form.Label>Birthday:</Form.Label>
-            <Form.Control as={DatePicker} value={profileData.birth} name="birth" onChange={handleDatePost} maxDate={maxDate} required />
+            <Form.Control as={DatePicker} value={profileData.birth} name="birth" onChange={handleDate} maxDate={maxDate} required />
             <Form.Text className="text-muted">
               Restrict to users 18 years and older
             </Form.Text>
@@ -175,7 +183,7 @@ const ProfileForm = () => {
           :
           <Button variant="success" className="w-100" type="submit">Submit</Button>
       }
-      <div className="p-3 mt-3 bg-danger text-center rounded">
+      <div className="p-3 mt-3 w-100 danger-container bg-danger text-center rounded">
         <Button variant="danger" onClick={handleDeleteUser} >Delete user</Button>
       </div>
 

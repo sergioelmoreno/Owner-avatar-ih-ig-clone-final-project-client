@@ -34,7 +34,7 @@ const NewPostForm = () => {
     setCategoriesClicked({ ...categoriesClicked, [name]: checked })
   }
 
-  const handleDatePost = date => {
+  const handleDate = date => {
     setPostData({ ...postData, date })
   }
 
@@ -49,7 +49,8 @@ const NewPostForm = () => {
       value && categories.push(key)
     }
 
-    const data = { ...postData, categories }
+    const data = { ...postData, images: [...imageData], categories }
+    // const data = { ...postData, categories }
 
     postsServices
       .savePost(data)
@@ -57,20 +58,20 @@ const NewPostForm = () => {
       .catch(err => console.log(err))
   }
 
-  const populateImageData = () => {
-    setPostData({ ...postData, images: imageData })
-  }
+  // const populateImageData = () => {
+  //   setPostData({ ...postData, images: imageData })
+  // }
 
-  useEffect(() => {
-    populateImageData()
-  }, [imageData])
+  // useEffect(() => {
+  //   populateImageData()
+  // }, [imageData])
 
   return (
     <Form onSubmit={handlePostSubmit}>
 
       <Row className="mb-3">
 
-        <NewImageForm setImageData={setImageData} imageData={imageData} />
+        <NewImageForm setImageData={setImageData} imageData={imageData} labelText={'Upload max 3 photos'} max={3} />
 
         <Form.Group as={Col} sm={12} className="mb-3">
           <Form.Label>Description:</Form.Label>
@@ -79,7 +80,7 @@ const NewPostForm = () => {
 
         <Form.Group as={Col} md={4} className="mb-3" controlId="date">
           <Form.Label>Date*</Form.Label>
-          <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDatePost} required />
+          <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDate} required />
         </Form.Group >
 
 

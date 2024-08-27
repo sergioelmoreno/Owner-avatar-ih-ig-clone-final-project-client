@@ -1,7 +1,7 @@
 import { Form } from "react-bootstrap"
 import uploadServices from "../../services/upload.services"
 
-const NewImageForm = ({ setImageData, imageData, handleInputChange }) => {
+const NewImageForm = ({ setImageData, imageData, labelText, max }) => {
 
 
   const handleFileUpload = e => {
@@ -12,14 +12,25 @@ const NewImageForm = ({ setImageData, imageData, handleInputChange }) => {
     uploadServices
       .uploadimage(formData)
       .then(res => {
-        setImageData([...imageData, res.data.cloudinary_url])
+        if (max > 1 && imageData.length < 3) {
+          const imgArr = [...imageData]
+          imgArr.push(res.data.cloudinary_url)
+          setImageData(imgArr)
+        } else {
+          setImageData(res.data.cloudinary_url)
+        }
       })
       .catch(err => console.log(err))
   }
 
   return (
     <Form.Group className="mb-3" controlId="image">
-      <Form.Label>Images:*</Form.Label>
+      {
+        labelText &&
+        <Form.Label>
+          {labelText}:<sup>*</sup>
+        </Form.Label>
+      }
       <Form.Control type="file" onChange={handleFileUpload} required />
     </Form.Group>
   )

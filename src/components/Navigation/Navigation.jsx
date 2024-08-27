@@ -12,20 +12,15 @@ const Navigation = () => {
 
   const handleLogout = e => {
     e.preventDefault()
-
     logoutUser()
-
-    if (!isLoading) {
-      navigate('/')
-    }
-
+    navigate('/')
   }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary Navigation mb-3">
       <Container fluid>
 
-        <Navbar.Brand as={Link} to={"/"} className="align-self-start">IGclone</Navbar.Brand>
+        <Navbar.Brand as={Link} to={"/"} className="align-self-start"><strong>PhotoGram</strong></Navbar.Brand>
         <div className="d-flex flex-column flex-md-row justify-content-end align-items-center">
           <div className="d-flex align-items-center order-md-1">
 
@@ -33,7 +28,7 @@ const Navigation = () => {
               loggedUser && (
                 <OverlayTooltip tooltipText={'Go to profile page'} id={'user-tooltip'} placement={'bottom'}>
                   <Link to={'/profile'} className="user d-flex aligm-items-center me-2 me-md-0">
-                    <img src={loggedUser.avatar} alt={loggedUser.nick} className="user-avatar me-2" />
+                    <img src={loggedUser.avatar} alt={loggedUser.nick} className="thumb-user-avatar me-2" />
                     <strong>@{loggedUser.nick}</strong>
                   </Link>
                 </OverlayTooltip>

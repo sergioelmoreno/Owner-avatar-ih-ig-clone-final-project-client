@@ -8,7 +8,7 @@ const CardImages = ({ images, postId }) => {
       {
         images.length > 1
           ?
-          <CostumCarousel images={images} postId={postId} />
+          <CostumCarousel images={images} postId={postId} variant="top" />
           :
           <Card.Img className='imageCard' variant="top" src={images[0]} />
       }

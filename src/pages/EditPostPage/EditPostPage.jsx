@@ -5,8 +5,8 @@ const EditPostPage = () => {
 
   return (
     <Container>
-      <Row className="justify-content-center">
-        <Col md={8}>
+      <Row>
+        <Col md={{ span: 10, offset: 1 }} lg={{ span: 8, offset: 2 }}>
           <PostDetailsForm />
         </Col>
       </Row>

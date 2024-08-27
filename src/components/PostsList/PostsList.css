@@ -1,0 +1,3 @@
+[data-masonry]>div {
+  transition: all ease .25s;
+}

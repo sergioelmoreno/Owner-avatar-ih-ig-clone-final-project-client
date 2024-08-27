@@ -30,7 +30,7 @@ const SignupForm = () => {
     setSignupData({ ...signupData, [name]: value })
   }
 
-  const handleBirthData = date => {
+  const handleDate = date => {
     setSignupData({ ...signupData, birth: date })
   }
 
@@ -95,7 +95,7 @@ const SignupForm = () => {
         <Col md={4}>
           <Form.Group>
             <Form.Label>Birthday:<sup>*</sup></Form.Label>
-            <Form.Control as={DatePicker} value={birthData.birth} name="birth" onChange={handleBirthData} maxDate={maxDate} required />
+            <Form.Control as={DatePicker} value={birthData.birth} name="birth" onChange={handleDate} maxDate={maxDate} required />
             <Form.Text className="text-muted">
               Restrict to users 18 years and older
             </Form.Text>

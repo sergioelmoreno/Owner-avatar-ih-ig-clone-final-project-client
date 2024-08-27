@@ -1,6 +1,6 @@
 import postsServices from "../../services/posts.services"
 import { useContext, useEffect, useState } from "react"
-import { Form, Row, Col, Button, FormCheck } from "react-bootstrap"
+import { Form, Row, Col, Button, FormCheck, Spinner } from "react-bootstrap"
 import DatePicker from "react-date-picker"
 import { useNavigate, useParams } from "react-router-dom"
 import NewImageForm from "../NewImageForm/NewImageForm"
@@ -27,9 +27,9 @@ const PostDetailsForm = () => {
 
   const [isLoadingData, setIsLoadingData] = useState(false)
 
-  const { loggedUser } = useContext(AuthContext)
-
   const [imageData, setImageData] = useState([])
+
+  const navigate = useNavigate()
 
   const fetchPostData = () => {
 
@@ -37,10 +37,16 @@ const PostDetailsForm = () => {
       .getPost(postId)
       .then(({ data }) => {
         setPostData({ ...data })
-        data.categories.forEach((cat) => {
-          setCategoriesClicked({ ...categoriesClicked, [cat]: true })
-        })
 
+        const categories = { ...categoriesClicked }
+
+        for (const [key] of Object.entries(categoriesClicked)) {
+          if (data.categories.includes(key)) {
+            categories[key] = true
+          }
+        }
+
+        setCategoriesClicked({ ...categories })
       })
       .catch(err => console.log(err))
   }
@@ -73,12 +79,22 @@ const PostDetailsForm = () => {
     const data = { ...postData, categories }
 
     postsServices
-      .savePost(data)
+      .editPost(postId, data)
       .then(() => {
         setIsLoadingData(false)
         fetchPostData()
       })
       .catch(err => console.log(err))
+  }
+
+  const handleDeletePost = postId => {
+    if (confirm("Are you sure? ")) {
+
+      postsServices
+        .deletePost(postId)
+        .then(() => navigate('/'))
+        .catch(err => console.log(err))
+    }
   }
 
   const populateImageData = () => {
@@ -97,8 +113,8 @@ const PostDetailsForm = () => {
     <Form onSubmit={handlePostSubmit}>
 
       <Row className="mb-3">
-
-        <NewImageForm setImageData={setImageData} imageData={imageData} />
+        {/* TODO: refactor the NewImageForm to show the fetch images  */}
+        {/* <NewImageForm setImageData={setImageData} imageData={imageData} /> */}
 
         <Form.Group as={Col} sm={12} className="mb-3">
           <Form.Label>Description:</Form.Label>
@@ -120,8 +136,30 @@ const PostDetailsForm = () => {
           <FormCheck inline label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Lifestyle} />
 
         </Form.Group>
-        <Button variant="success" type="submit">Create new post</Button>
+
       </Row>
+
+      {
+        isLoadingData
+          ?
+          <Button variant="success" className="w-100" disabled>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="me-2"
+            />
+            <span>Loading...</span>
+          </Button>
+          :
+          <Button variant="success" className="w-100" type="submit">Submit</Button>
+      }
+
+      <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
+        <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
+      </div>
     </Form >
   )
 }

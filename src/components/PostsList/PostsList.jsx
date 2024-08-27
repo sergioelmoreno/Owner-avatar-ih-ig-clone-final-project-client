@@ -1,3 +1,4 @@
+import './PostsList.css'
 import { useEffect, useState } from "react"
 import postsServices from "../../services/posts.services"
 import { Col, Row } from "react-bootstrap"
@@ -15,11 +16,13 @@ const PostList = () => {
   }
 
   const handleDeletePost = _id => {
+    if (confirm("Are you sure?")) {
 
-    postsServices
-      .deletePost(_id)
-      .then(() => fetchPosts())
-      .catch(err => console.log(err))
+      postsServices
+        .deletePost(_id)
+        .then(() => fetchPosts())
+        .catch(err => console.log(err))
+    }
   }
 
   useEffect(() => {

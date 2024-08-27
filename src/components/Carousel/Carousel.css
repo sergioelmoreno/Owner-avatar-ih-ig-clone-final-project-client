@@ -1,5 +1,14 @@
-.cardImage {
+.Carousel img {
   object-fit: cover;
-  height: 150px;
-  width: 100%;
+}
+
+[data-bs-theme="dark"] .Carousel.carousel .carousel-indicators [data-bs-target],
+[data-bs-theme="dark"] .Carousel.carousel .carousel-indicators [data-bs-target] {
+  filter: invert(100%);
+
+}
+
+[data-bs-theme="dark"] .Carousel.carousel .carousel-control-prev-icon,
+[data-bs-theme="dark"] .Carousel.carousel .carousel-control-next-icon {
+  filter: invert(0%) grayscale(100%);
 }
