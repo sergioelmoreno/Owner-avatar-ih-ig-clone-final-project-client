@@ -48,67 +48,65 @@ const SignupForm = () => {
 
     <Form onSubmit={handleFormSubmit} className="SignupForm" >
 
-      <Container fluid>
+      <Row className="mb-3">
 
-        <Row className="mb-3">
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>Username:<sup>*</sup></Form.Label>
+            <Form.Control type="text" value={signupData.nick} name="nick" onChange={handleInputChange} required></Form.Control>
+          </Form.Group>
+        </Col>
 
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label>Username:<sup>*</sup></Form.Label>
-              <Form.Control type="text" value={signupData.nick} name="nick" onChange={handleInputChange} required></Form.Control>
-            </Form.Group>
-          </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>Email:<sup>*</sup></Form.Label>
+            <Form.Control type="email" value={signupData.email} name="email" onChange={handleInputChange} required />
+          </Form.Group>
+        </Col>
 
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label>Email:<sup>*</sup></Form.Label>
-              <Form.Control type="email" value={signupData.email} name="email" onChange={handleInputChange} required />
-            </Form.Group>
-          </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>First name:<sup>*</sup></Form.Label>
+            <Form.Control type="text" value={signupData.firstname} name="firstname" onChange={handleInputChange} required></Form.Control>
+          </Form.Group>
+        </Col>
 
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label>First name:<sup>*</sup></Form.Label>
-              <Form.Control type="text" value={signupData.firstname} name="firstname" onChange={handleInputChange} required></Form.Control>
-            </Form.Group>
-          </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>Last name:<sup>*</sup></Form.Label>
+            <Form.Control type="text" value={signupData.lastname} name="lastname" onChange={handleInputChange} required></Form.Control>
+          </Form.Group>
+        </Col>
 
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label>Last name:<sup>*</sup></Form.Label>
-              <Form.Control type="text" value={signupData.lastname} name="lastname" onChange={handleInputChange} required></Form.Control>
-            </Form.Group>
-          </Col>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Password:<sup>*</sup></Form.Label>
+            <Form.Control type="password" value={signupData.password} name="password" onChange={handleInputChange} required></Form.Control>
+          </Form.Group>
+        </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Password:<sup>*</sup></Form.Label>
-              <Form.Control type="password" value={signupData.password} name="password" onChange={handleInputChange} required></Form.Control>
-            </Form.Group>
-          </Col>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Avatar:</Form.Label>
+            <Form.Control type="text" value={signupData.avatar} name="avatar" onChange={handleInputChange}></Form.Control>
+          </Form.Group>
+        </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Avatar:</Form.Label>
-              <Form.Control type="text" value={signupData.avatar} name="avatar" onChange={handleInputChange}></Form.Control>
-            </Form.Group>
-          </Col>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label>Birthday:<sup>*</sup></Form.Label>
+            <Form.Control as={DatePicker} value={birthData.birth} name="birth" onChange={handleBirthData} maxDate={maxDate} required />
+            <Form.Text className="text-muted">
+              Restrict to users 18 years and older
+            </Form.Text>
+          </Form.Group>
+        </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Birthday:<sup>*</sup></Form.Label>
-              <Form.Control as={DatePicker} value={birthData.birth} name="birth" onChange={handleBirthData} maxDate={maxDate} required />
-              <Form.Text className="text-muted">
-                Restrict to users 18 years and older
-              </Form.Text>
-            </Form.Group>
-          </Col>
+      </Row>
 
-        </Row>
+      <Button variant="success" className="w-100" type="submit">Register</Button>
 
-        <Button variant="success" className="w-100" type="submit">Register</Button>
 
-      </Container>
 
     </Form>
   )

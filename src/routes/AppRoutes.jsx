@@ -8,6 +8,7 @@ import NotFoundPage from '../pages/NotFoundPage/NotFoundPage'
 import PrivateRoutes from './PrivateRoutes'
 import ProfilePage from '../pages/ProfilePage/ProfilePage'
 import PostDetailsPage from '../pages/PostDetailsPage/PostDetailsPage'
+import EditPostPage from '../pages/EditPostPage/EditPostPage'
 
 const AppRoutes = () => {
 
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route path={'/'} element={<PostsPage />} />
         <Route path={'/posts/new'} element={<CreatePostPage />} />
         <Route path={'/posts/post/:postId'} element={<PostDetailsPage />} />
+        <Route path={'/posts/edit/:postId'} element={<EditPostPage />} />
         <Route path={'/signup'} element={<SignupPage />} />
         <Route path={'/login'} element={<LoginPage />} />
         <Route path={'*'} element={<NotFoundPage />} />

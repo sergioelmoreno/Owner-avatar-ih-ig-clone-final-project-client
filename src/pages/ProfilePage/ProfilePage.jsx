@@ -5,9 +5,8 @@ const ProfilePage = () => {
 
   return (
     <Container>
-      <h1>My profile:</h1>
+      <h1>Edit my profile:</h1>
       <hr />
-
       <ProfileForm />
     </Container>
   )

@@ -10,7 +10,7 @@ const LoginForm = () => {
     password: ""
   })
 
-  const { loginUser, isLoading, logoutUser } = useContext(AuthContext)
+  const { loginUser, isLoading } = useContext(AuthContext)
 
   const handleLoginData = e => {
     const { name, value } = e.target

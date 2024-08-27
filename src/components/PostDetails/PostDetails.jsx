@@ -3,7 +3,7 @@ import heartFill from './../../assets/heart-fill.svg'
 import calendarCheck from './../../assets/calendar-check.svg'
 import { useEffect, useState } from "react"
 import { Card, Button, Badge, Stack } from "react-bootstrap"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import { AuthContext } from "../../contexts/auth.context"
 import { convertDate } from "../../utils/date.utils"
@@ -15,6 +15,7 @@ import UserInfo from '../UserInfo/UserInfo'
 const PostDetails = () => {
 
   const { postId } = useParams()
+
   const [postData, setPostData] = useState({
     owner: "",
     images: [],
@@ -27,6 +28,8 @@ const PostDetails = () => {
 
   const { loggedUser, isLoading } = useContext(AuthContext)
 
+  const navigate = useNavigate()
+
   const fetchPostDetails = () => {
 
     postsServices
@@ -35,6 +38,14 @@ const PostDetails = () => {
         setPostData({ ...data })
       })
       .catch((err) => console.log(err))
+  }
+
+  const handleDeletePost = () => {
+
+    postsServices
+      .deletePost(postId)
+      .then(() => navigate('/'))
+      .catch(err => console.log(err))
   }
 
   useEffect(() => {
@@ -77,11 +88,11 @@ const PostDetails = () => {
           {postData.description}
         </Card.Text>
         {
-
           loggedUser?._id === postData.owner._id &&
-          < span className='d-flex justify-content-end'>
-            <Button variant='success' as={Link} to={`/post/edit/${postId}`} >Edit Post</Button>
-          </span>
+          <Card.Footer className='d-flex justify-content-between'>
+            <Button variant='danger' onClick={handleDeletePost}>Delete post</Button>
+            <Button variant='success' as={Link} to={`/posts/edit/${postId}`} >Edit Post</Button>
+          </Card.Footer>
         }
       </Card >
     </>

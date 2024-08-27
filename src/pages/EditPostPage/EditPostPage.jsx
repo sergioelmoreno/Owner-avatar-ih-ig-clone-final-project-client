@@ -1,17 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap"
-import PostDetails from "../../components/PostDetails/PostDetails"
+import PostDetailsForm from "../../components/PostDetailsForm/PostDetailsForm"
 
-const PostDetailsPage = () => {
+const EditPostPage = () => {
 
   return (
     <Container>
       <Row className="justify-content-center">
         <Col md={8}>
-          <PostDetails />
+          <PostDetailsForm />
         </Col>
       </Row>
     </Container>
   )
 }
 
-export default PostDetailsPage
+export default EditPostPage

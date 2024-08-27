@@ -36,6 +36,10 @@ class AuthServices {
     return this.axiosApp.put('/profile', userData)
   }
 
+  deleteUser(userId) {
+    return this.axiosApp.delete(`/delete/${userId}`)
+  }
+
   verifyToken() {
     return this.axiosApp.get('/auth/verify')
   }

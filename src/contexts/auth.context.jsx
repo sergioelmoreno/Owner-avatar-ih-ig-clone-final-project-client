@@ -37,8 +37,6 @@ function AuthProviderWrapper(props) {
     }
   }
 
-
-
   const logoutUser = () => {
     setLoggedUser(null)
     localStorage.removeItem('userAuthToken')

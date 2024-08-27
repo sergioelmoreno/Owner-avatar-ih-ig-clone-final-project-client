@@ -45,9 +45,6 @@ const Navigation = () => {
           </div>
 
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-3">
-              <Nav.Link as={Link} href="/about-us">About us</Nav.Link>
-            </Nav>
 
             {
               loggedUser
