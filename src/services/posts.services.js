@@ -21,15 +21,15 @@ class PostsServices {
   }
 
   savePost(postData) {
-    return this.axiosApp.post(`/new`, postData)
+    return this.axiosApp.post(`/`, postData)
   }
 
   getPost(postId) {
     return this.axiosApp.get(`/post/${postId}`)
   }
 
-  editPost(postId) {
-    return this.axiosApp.put(`/post/edit/${postId}`)
+  editPost(postId, postData) {
+    return this.axiosApp.put(`/post/edit/${postId}`, postData)
   }
 
   deletePost(postId) {
