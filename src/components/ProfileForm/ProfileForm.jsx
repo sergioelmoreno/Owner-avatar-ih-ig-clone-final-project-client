@@ -120,6 +120,7 @@ const ProfileForm = () => {
           <Col md={6}>
             <div className="d-flex align-items-center">
               <img src={profileData.avatar} alt={profileData.nick} className="flex-1" />
+              {/* TODO: Add Uploader */}
               <Form.Group>
                 <Form.Label>Avatar:</Form.Label>
                 <Form.Control type="text" value={profileData.avatar} name="avatar" onChange={handleInputChange}></Form.Control>

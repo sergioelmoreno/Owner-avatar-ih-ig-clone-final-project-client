@@ -1,6 +1,6 @@
 import postsServices from "../../services/posts.services"
 import { useEffect, useState } from "react"
-import { Form, FormControl, FormGroup, FormLabel, FloatingLabel, Row, Col, Button, FormCheck } from "react-bootstrap"
+import { Form, Row, Col, Button, FormCheck } from "react-bootstrap"
 import DatePicker from "react-date-picker"
 import { useNavigate } from "react-router-dom"
 import NewImageForm from "../NewImageForm/NewImageForm"
@@ -73,11 +73,7 @@ const NewPostForm = () => {
         <NewImageForm setImageData={setImageData} imageData={imageData} />
 
         <Form.Group as={Col} sm={12} className="mb-3">
-
-          <Form.Label>
-            Description:
-          </Form.Label>
-
+          <Form.Label>Description:</Form.Label>
           <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
         </Form.Group>
 
@@ -89,40 +85,14 @@ const NewPostForm = () => {
 
         <Form.Group className="mb-3" as={Col} md={8}>
           <Form.Label className="mb-3">Categories</Form.Label>
-          <div>
-            <FormCheck
-              inline
-              label="Food"
-              name="Food"
-              type='checkbox'
-              onChange={handleCheckboxChange}
-            />
-            <FormCheck
-              inline
-              label="Technology"
-              name="Technology"
-              type='checkbox'
-              onChange={handleCheckboxChange}
-            />
-            <FormCheck
-              inline
-              label="Nature"
-              name="Nature"
-              type='checkbox'
-              onChange={handleCheckboxChange}
-            />
-            <FormCheck
-              inline
-              label="Lifestyle"
-              name="Lifestyle"
-              type='checkbox'
-              onChange={handleCheckboxChange}
-            />
-          </div>
+
+          <FormCheck inline label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
+          <FormCheck inline label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
+          <FormCheck inline label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
+          <FormCheck inline label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
+
         </Form.Group>
-        <div className="d-grid">
-          <Button variant="success" type="submit">Create new post</Button>
-        </div>
+        <Button variant="success" type="submit">Create new post</Button>
       </Row>
     </Form >
   )

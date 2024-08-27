@@ -4,11 +4,9 @@ import { Container } from "react-bootstrap"
 const PostsPage = () => {
 
   return (
-    <>
-      <Container>
-        <PostList />
-      </Container>
-    </>
+    <Container>
+      <PostList />
+    </Container>
   )
 }
 

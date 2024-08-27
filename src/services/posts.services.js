@@ -22,24 +22,24 @@ class PostsServices {
 
   savePost(postData) {
     return this.axiosApp.post(`/new`, postData)
-
-  }
-
-  getAllPosts() {
-    return this.axiosApp.get(``)
   }
 
   getPost(postId) {
-    return this.axiosApp.get(`/${postId}`)
+    return this.axiosApp.get(`/post/${postId}`)
   }
 
   editPost(postId) {
-    return this.axiosApp.put(`/edit/${postId}`)
+    return this.axiosApp.put(`/post/edit/${postId}`)
   }
 
   deletePost(postId) {
     return this.axiosApp.delete(`/delete/${postId}`)
   }
+
+  getAllPosts() {
+    return axios.get(`${import.meta.env.VITE_APP_API_URL}/api/posts`)
+  }
+
 }
 
 

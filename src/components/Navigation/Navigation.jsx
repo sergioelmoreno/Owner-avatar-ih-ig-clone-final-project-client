@@ -1,13 +1,25 @@
 import './Navigation.css'
 import { useContext } from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../contexts/auth.context"
 import OverlayTooltip from "../OverlayTooltip/OverlayTooltip"
 
 const Navigation = () => {
 
-  const { loggedUser, logoutUser } = useContext(AuthContext)
+  const { loggedUser, logoutUser, isLoading } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const handleLogout = e => {
+    e.preventDefault()
+
+    logoutUser()
+
+    if (!isLoading) {
+      navigate('/')
+    }
+
+  }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary Navigation mb-3">
@@ -21,7 +33,7 @@ const Navigation = () => {
               loggedUser && (
                 <OverlayTooltip tooltipText={'Go to profile page'} id={'user-tooltip'} placement={'bottom'}>
                   <Link to={'/profile'} className="user d-flex aligm-items-center me-2 me-md-0">
-                    <img src={loggedUser.avatar} alt={loggedUser.nick} className="me-2" />
+                    <img src={loggedUser.avatar} alt={loggedUser.nick} className="user-avatar me-2" />
                     <strong>@{loggedUser.nick}</strong>
                   </Link>
                 </OverlayTooltip>
@@ -45,7 +57,7 @@ const Navigation = () => {
                     <Nav.Link as={Link} to={'/posts/new'}>New Post</Nav.Link>
                   </Nav>
                   <Nav className="me-3">
-                    <Nav.Link as={Link} onClick={logoutUser}>Logout</Nav.Link>
+                    <Nav.Link as={Link} onClick={handleLogout}>Logout</Nav.Link>
                   </Nav>
                 </>
                 :

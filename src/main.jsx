@@ -15,6 +15,3 @@ createRoot(document.getElementById('root')).render(
     </AuthProviderWrapper>
   </StrictMode>
 )
-
-
-

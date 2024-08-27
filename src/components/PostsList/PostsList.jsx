@@ -13,6 +13,7 @@ const PostList = () => {
       .then(({ data }) => setPosts(data))
       .catch(err => console.log(err))
   }
+
   const handleDeletePost = _id => {
 
     postsServices
@@ -30,7 +31,7 @@ const PostList = () => {
       {
         posts.map((elm) => {
           return (
-            <Col key={elm._id} md={{ span: 4 }} lg={{ span: 3 }} className="mb-3">
+            <Col key={elm._id} md={{ span: 6 }} lg={{ span: 4 }} className="mb-3">
               <PostCard {...elm} handleDeletePost={handleDeletePost} />
             </Col>
           )

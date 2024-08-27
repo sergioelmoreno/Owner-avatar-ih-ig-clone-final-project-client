@@ -5,9 +5,10 @@ const LoginPage = () => {
   return (
     <div className="LoginPage">
       <Container>
-        <h1>Login:</h1>
 
+        <h1>Create a new account:</h1>
         <LoginForm />
+
       </Container>
     </div>
   )
