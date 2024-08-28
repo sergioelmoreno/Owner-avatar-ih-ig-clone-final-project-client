@@ -1,6 +1,4 @@
 import pencilSquare from './../../assets/pencil-square.svg'
-import heart from './../../assets/heart.svg'
-import heartFill from './../../assets/heart-fill.svg'
 import calendarCheck from './../../assets/calendar-check.svg'
 import { Accordion, Col, Container, Row } from "react-bootstrap"
 import { useEffect, useState } from "react"
@@ -16,6 +14,7 @@ import UserInfo from '../../components/UserInfo/UserInfo'
 import CommentForm from "../../components/CommentForm/CommentForm"
 import CommentsList from '../../components/CommentsList/CommentsList'
 import commentsServices from '../../services/comments.services'
+import LikesForm from '../../components/Likesform/LikesForm'
 
 const PostDetailsPage = () => {
 
@@ -34,6 +33,7 @@ const PostDetailsPage = () => {
 
   const [commentsData, getCommentsData] = useState([])
 
+  const [loadingData, setLoadingData] = useState(false)
   // TODO: RESEARCH HOW TO FORCE COLLAPSE ON SUBMIT COMMENT
   //const [accordionCollapse, setAccordionCollapse] = useState(false)
 
@@ -42,11 +42,14 @@ const PostDetailsPage = () => {
   const navigate = useNavigate()
 
   const fetchPostDetails = () => {
-
+    setLoadingData(true)
     postsServices
       .getPost(postId)
       .then(({ data }) => {
+
         setPostData({ ...data })
+        setLoadingData(false)
+
       })
       .catch((err) => console.log(err))
   }
@@ -70,91 +73,97 @@ const PostDetailsPage = () => {
   }
 
   useEffect(() => {
+
     fetchPostDetails()
     fetchCommentsDetails()
+
   }, [])
+
 
   return (
     <Container>
       <Row>
         <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
 
-          {isLoading && <LoadingSpinner />}
+          {isLoading && loadingData ?
+            <LoadingSpinner />
+            :
+            <Card className="shadow text-bg-light">
 
-          <Card className="shadow text-bg-light">
+              <div className="d-flex justify-content-between p-3">
+                <UserInfo owner={postData.owner} />
 
-            <div className="d-flex justify-content-between p-3">
-              <UserInfo owner={postData.owner} />
-              {/* TODO: Create component */}
-              <span className='d-flex align-items-center gap-2'>
-                {postData.likes.length} <img src={!postData.likes || !postData.likes.length ? heart : heartFill} alt="Like" style={{ width: "20px" }} />
-              </span>
-            </div>
+                {!isLoading && !loadingData && <LikesForm postData={postData} setPostData={setPostData} />}
 
-            <hr className="my-0" />
-
-            {
-              loggedUser?._id === postData.owner._id &&
-              <div className='d-flex justify-content-between p-2'>
-                <Button variant='danger' onClick={handleDeletePost} size='sm'>Delete post</Button>
-                <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
               </div>
-            }
 
-            {
-              postData.images && <CardImages images={postData.images} postId={postId} position={null} />
-            }
+              <hr className="my-0" />
+
+              {
+                loggedUser?._id === postData.owner._id &&
+                <div className='d-flex justify-content-between p-2'>
+                  <Button variant='danger' onClick={handleDeletePost} size='sm'>Delete post</Button>
+                  <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
+                </div>
+              }
+
+              {
+                postData.images && <CardImages images={postData.images} postId={postId} position={null} />
+              }
 
 
-            <Card.Subtitle className="d-flex justify-content-between p-3">
+              <Card.Subtitle className="d-flex justify-content-between p-3">
 
-              <span className='d-flex align-items-center'>
-                <img src={calendarCheck} alt="Date of the pictures" className='me-2' />
-                <small>
-                  {convertDate(postData.date)}
-                </small>
-              </span>
-              <Stack direction='horizontal' gap={2}>
-                {
-                  postData.categories.map((cat, idx) => {
-                    return <Badge key={`${postData._id}-${idx}`} bg="secondary">{cat}</Badge>
-                  })
-                }
+                <span className='d-flex align-items-center'>
+                  <img src={calendarCheck} alt="Date of the pictures" className='me-2' />
+                  <small>
+                    {convertDate(postData.date)}
+                  </small>
+                </span>
+                <Stack direction='horizontal' gap={2}>
+                  {
+                    postData.categories.map((cat, idx) => {
+                      return <Badge key={`${postData._id}-${idx}`} bg="secondary">{cat}</Badge>
+                    })
+                  }
 
-              </Stack>
+                </Stack>
 
-            </Card.Subtitle>
+              </Card.Subtitle>
 
-            <Card.Text className="p-3">
-              {postData.description}
-            </Card.Text>
+              <Card.Text className="p-3">
+                {postData.description}
+              </Card.Text>
 
-            <hr className="my-0" />
+              <hr className="my-0" />
 
-            <Card.Footer className="py-3 px-0">
+              <Card.Footer className="py-3 px-0">
 
-              <Stack>
-                {
-                  loggedUser &&
-                  <Accordion flush data-bs-theme="light">
-                    <Accordion.Item eventKey={0}>
-                      <Accordion.Header>
-                        <span className='me-3'><img src={pencilSquare} alt="Write a comment" /></span>
-                        <span><strong>Write a comment</strong></span>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <CommentForm fetchCommentsDetails={fetchCommentsDetails} />
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                }
-              </Stack>
+                <Stack>
+                  {
+                    loggedUser &&
+                    <Accordion flush data-bs-theme="light">
+                      <Accordion.Item eventKey={0}>
+                        <Accordion.Header>
+                          <span className='me-3'><img src={pencilSquare} alt="Write a comment" /></span>
+                          <span><strong>Write a comment</strong></span>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <CommentForm fetchCommentsDetails={fetchCommentsDetails} />
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
+                  }
+                </Stack>
 
-              <CommentsList postId={postId} fetchCommentsDetails={fetchCommentsDetails} commentsData={commentsData} />
+                <CommentsList postId={postId} fetchCommentsDetails={fetchCommentsDetails} commentsData={commentsData} />
 
-            </Card.Footer>
+              </Card.Footer>
 
-          </Card >
+            </Card >
+
+          }
+
         </Col>
       </Row>
     </Container>

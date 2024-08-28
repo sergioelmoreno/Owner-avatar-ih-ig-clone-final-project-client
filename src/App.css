@@ -65,3 +65,7 @@
 .tooltip.danger .tooltip-inner {
   color: var(--bs-white);
 }
+
+.likes.clickable:hover {
+  cursor: pointer;
+}
