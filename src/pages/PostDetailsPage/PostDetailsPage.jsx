@@ -1,3 +1,4 @@
+import pencilSquare from './../../assets/pencil-square.svg'
 import heart from './../../assets/heart.svg'
 import heartFill from './../../assets/heart-fill.svg'
 import calendarCheck from './../../assets/calendar-check.svg'
@@ -13,6 +14,8 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import CardImages from '../../components/CardImages/CardImages'
 import UserInfo from '../../components/UserInfo/UserInfo'
 import CommentForm from "../../components/CommentForm/CommentForm"
+import CommentsList from '../../components/CommentsList/CommentsList'
+import commentsServices from '../../services/comments.services'
 
 const PostDetailsPage = () => {
 
@@ -29,8 +32,10 @@ const PostDetailsPage = () => {
     likes: [],
   })
 
+  const [commentsData, getCommentsData] = useState([])
+
   // TODO: RESEARCH HOW TO FORCE COLLAPSE ON SUBMIT COMMENT
-  const [accordionCollapse, setAccordionCollapse] = useState(false)
+  //const [accordionCollapse, setAccordionCollapse] = useState(false)
 
   const { loggedUser, isLoading } = useContext(AuthContext)
 
@@ -54,12 +59,20 @@ const PostDetailsPage = () => {
       .catch(err => console.log(err))
   }
 
+  const fetchCommentsDetails = () => {
+
+    commentsServices
+      .getCommentsList(postId)
+      .then(({ data }) => {
+        getCommentsData(data)
+      })
+      .catch((err) => console.log(err))
+  }
+
   useEffect(() => {
     fetchPostDetails()
+    fetchCommentsDetails()
   }, [])
-
-  useEffect(() => setAccordionCollapse(false), [fetchPostDetails])
-
 
   return (
     <Container>
@@ -77,7 +90,9 @@ const PostDetailsPage = () => {
                 {postData.likes.length} <img src={!postData.likes || !postData.likes.length ? heart : heartFill} alt="Like" style={{ width: "20px" }} />
               </span>
             </div>
+
             <hr className="my-0" />
+
             {
               loggedUser?._id === postData.owner._id &&
               <div className='d-flex justify-content-between p-2'>
@@ -85,6 +100,7 @@ const PostDetailsPage = () => {
                 <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
               </div>
             }
+
             {
               postData.images && <CardImages images={postData.images} postId={postId} position={null} />
             }
@@ -116,20 +132,26 @@ const PostDetailsPage = () => {
             <hr className="my-0" />
 
             <Card.Footer className="py-3 px-0">
-              <p className="px-3">Comments:</p>
+
               <Stack>
                 {
                   loggedUser &&
                   <Accordion flush data-bs-theme="light">
-                    <Accordion.Item eventKey={0} in={accordionCollapse} onClick={() => setAccordionCollapse(!accordionCollapse)}>
-                      <Accordion.Header>Write a comment</Accordion.Header>
+                    <Accordion.Item eventKey={0}>
+                      <Accordion.Header>
+                        <span className='me-3'><img src={pencilSquare} alt="Write a comment" /></span>
+                        <span><strong>Write a comment</strong></span>
+                      </Accordion.Header>
                       <Accordion.Body>
-                        <CommentForm fetchPostDetails={fetchPostDetails} />
+                        <CommentForm fetchCommentsDetails={fetchCommentsDetails} />
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>
                 }
               </Stack>
+
+              <CommentsList postId={postId} fetchCommentsDetails={fetchCommentsDetails} commentsData={commentsData} />
+
             </Card.Footer>
 
           </Card >

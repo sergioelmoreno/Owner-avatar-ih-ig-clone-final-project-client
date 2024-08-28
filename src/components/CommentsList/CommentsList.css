@@ -1,0 +1,9 @@
+.delete-icon:hover {
+  cursor: pointer;
+}
+
+.delete-icon img {
+  width: 1.5rem;
+  height: auto;
+
+}

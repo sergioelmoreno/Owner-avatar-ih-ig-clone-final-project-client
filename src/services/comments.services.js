@@ -25,19 +25,15 @@ class CommentsServices {
   }
 
   getCommentsList(postId) {
-    return this.axiosApp.get(`/post/${postId}`)
+    return this.axiosApp.get(`/${postId}`)
   }
 
   editPost(postId, postData) {
-    return this.axiosApp.put(`/post/edit/${postId}`, postData)
+    return this.axiosApp.put(`/edit/${postId}`, postData)
   }
 
-  deletePost(postId) {
-    return this.axiosApp.delete(`/delete/${postId}`)
-  }
-
-  getAllPosts() {
-    return axios.get(`${import.meta.env.VITE_APP_API_URL}/api/posts`)
+  deleteComment(commentId) {
+    return this.axiosApp.delete(`/${commentId}`)
   }
 
 }

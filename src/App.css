@@ -52,3 +52,12 @@
 .hstack {
   flex-wrap: wrap;
 }
+
+.tooltip.danger {
+  --bs-tooltip-bg: var(--bs-danger);
+  color: var(--bs-white);
+}
+
+.tooltip.danger .tooltip-inner {
+  color: var(--bs-white);
+}
