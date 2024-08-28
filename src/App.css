@@ -4,6 +4,10 @@
   --bs-accordion-active-bg: var(--bs-success-bg-subtle);
 }
 
+.pb-6 {
+  padding-bottom: 6rem;
+}
+
 .react-date-picker__wrapper {
   border: 0 !important;
 }
@@ -43,7 +47,7 @@
 }
 
 .danger-container {
-  position: absolute;
+  position: fixed;
   margin: 0 auto;
   bottom: 0;
   left: 0;

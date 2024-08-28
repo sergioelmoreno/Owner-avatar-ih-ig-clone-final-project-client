@@ -46,7 +46,7 @@ const CommentForm = ({ fetchCommentsDetails }) => {
 
   useEffect(() => {
 
-  }, [textValidation.active])
+  }, [])
 
   return (
 
