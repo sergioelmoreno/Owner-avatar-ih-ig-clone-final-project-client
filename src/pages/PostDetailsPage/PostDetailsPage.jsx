@@ -65,8 +65,11 @@ const PostDetailsPage = () => {
     <Container>
       <Row>
         <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
+
           {isLoading && <LoadingSpinner />}
+
           <Card className="shadow text-bg-light">
+
             <div className="d-flex justify-content-between p-3">
               <UserInfo owner={postData.owner} />
               {/* TODO: Create component */}
@@ -105,10 +108,13 @@ const PostDetailsPage = () => {
               </Stack>
 
             </Card.Subtitle>
+
             <Card.Text className="p-3">
               {postData.description}
             </Card.Text>
+
             <hr className="my-0" />
+
             <Card.Footer className="py-3 px-0">
               <p className="px-3">Comments:</p>
               <Stack>
@@ -124,7 +130,6 @@ const PostDetailsPage = () => {
                   </Accordion>
                 }
               </Stack>
-
             </Card.Footer>
 
           </Card >

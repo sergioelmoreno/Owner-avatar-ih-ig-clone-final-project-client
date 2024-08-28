@@ -48,3 +48,7 @@
   bottom: 0;
   left: 0;
 }
+
+.hstack {
+  flex-wrap: wrap;
+}

@@ -102,9 +102,12 @@ const SignupForm = () => {
           </Form.Group>
         </Col>
 
+        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+          <Button variant="success" className="w-100" type="submit">Register</Button>
+        </Col>
+
       </Row>
 
-      <Button variant="success" className="w-100" type="submit">Register</Button>
 
 
 

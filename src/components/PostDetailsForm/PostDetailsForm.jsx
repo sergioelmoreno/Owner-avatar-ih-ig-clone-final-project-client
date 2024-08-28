@@ -145,6 +145,7 @@ const PostDetailsForm = () => {
         </Col>
 
         <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+
           {
             isLoadingData
               ?
@@ -163,11 +164,13 @@ const PostDetailsForm = () => {
               <Button variant="success" className="w-100" type="submit">Submit</Button>
           }
 
-          <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
-            <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
-          </div>
         </Col>
       </Row>
+
+      <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
+        <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
+      </div>
+
     </Form >
   )
 }

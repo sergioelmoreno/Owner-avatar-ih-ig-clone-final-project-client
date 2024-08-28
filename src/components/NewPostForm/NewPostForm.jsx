@@ -59,7 +59,6 @@ const NewPostForm = () => {
 
   return (
     <Form onSubmit={handlePostSubmit}>
-
       <Row className="mb-3">
 
         <NewImageForm setImageData={setImageData} imageData={imageData} labelText={'Upload max 3 photos'} max={3} />
@@ -84,7 +83,11 @@ const NewPostForm = () => {
             <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
           </Stack>
         </Form.Group>
-        <Button variant="success" type="submit">Create new post</Button>
+
+        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+          <Button variant="success" type="submit" className="w-100">Create new post</Button>
+        </Col>
+
       </Row>
     </Form >
   )
