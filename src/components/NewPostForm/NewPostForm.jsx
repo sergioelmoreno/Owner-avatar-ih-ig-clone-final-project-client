@@ -1,8 +1,8 @@
-import postsServices from "../../services/posts.services"
-import { useEffect, useState } from "react"
-import { Form, Row, Col, Button, FormCheck } from "react-bootstrap"
-import DatePicker from "react-date-picker"
+import { useState } from "react"
+import { Form, Row, Col, Button, FormCheck, Stack } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import DatePicker from "react-date-picker"
+import postsServices from "../../services/posts.services"
 import NewImageForm from "../NewImageForm/NewImageForm"
 
 
@@ -50,21 +50,12 @@ const NewPostForm = () => {
     }
 
     const data = { ...postData, images: [...imageData], categories }
-    // const data = { ...postData, categories }
 
     postsServices
       .savePost(data)
       .then(() => navigate('/'))
       .catch(err => console.log(err))
   }
-
-  // const populateImageData = () => {
-  //   setPostData({ ...postData, images: imageData })
-  // }
-
-  // useEffect(() => {
-  //   populateImageData()
-  // }, [imageData])
 
   return (
     <Form onSubmit={handlePostSubmit}>
@@ -78,7 +69,7 @@ const NewPostForm = () => {
           <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
         </Form.Group>
 
-        <Form.Group as={Col} md={4} className="mb-3" controlId="date">
+        <Form.Group as={Col} md={4} className="mb-3">
           <Form.Label>Date*</Form.Label>
           <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDate} required />
         </Form.Group >
@@ -86,12 +77,12 @@ const NewPostForm = () => {
 
         <Form.Group className="mb-3" as={Col} md={8}>
           <Form.Label className="mb-3">Categories</Form.Label>
-
-          <FormCheck inline label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
-          <FormCheck inline label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
-          <FormCheck inline label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
-          <FormCheck inline label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
-
+          <Stack direction="horizontal" gap={3}>
+            <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
+            <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
+            <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
+            <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
+          </Stack>
         </Form.Group>
         <Button variant="success" type="submit">Create new post</Button>
       </Row>

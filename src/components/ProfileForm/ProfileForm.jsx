@@ -105,49 +105,49 @@ const ProfileForm = () => {
 
       <Row className="mb-3">
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Username:</Form.Label>
             <Form.Control type="text" defaultValue={nick} name="nick" disabled></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Email:</Form.Label>
             <Form.Control type="email" defaultValue={email} name="email" disabled />
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>First name:</Form.Label>
             <Form.Control type="text" value={profileData.firstname} name="firstname" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Last name:</Form.Label>
             <Form.Control type="text" value={profileData.lastname} name="lastname" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Country:</Form.Label>
             <Form.Control type="text" value={profileData.country} name="country" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Phone:</Form.Label>
             <Form.Control type="text" value={profileData.phone} name="phone" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={6} className="d-flex align-items-center justify-content-stretch">
+        <Col md={{ span: 6 }} className="d-flex align-items-center justify-content-stretch">
           {/* TODO: Change the avatar at the loggedUser payload */}
           <img src={profileData.avatar} alt={profileData.nick} className="user-avatar me-2" />
           <span className="flex-grow-1">
@@ -155,7 +155,7 @@ const ProfileForm = () => {
           </span>
         </Col>
 
-        <Col md={6}>
+        <Col md={{ span: 6 }}>
           <Form.Group>
             <Form.Label>Birthday:</Form.Label>
             <Form.Control as={DatePicker} value={profileData.birth} name="birth" onChange={handleDate} maxDate={maxDate} required />
@@ -165,27 +165,29 @@ const ProfileForm = () => {
           </Form.Group>
         </Col>
 
+        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+          {
+            isLoadingData
+              ?
+              <Button variant="success" className="w-100" disabled>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                <span>Loading...</span>
+              </Button>
+              :
+              <Button variant="success" className="w-100" type="submit">Submit</Button>
+          }
+          <div className="p-3 mt-3 w-100 danger-container bg-danger text-center rounded">
+            <Button variant="danger" onClick={handleDeleteUser} >Delete user</Button>
+          </div>
+        </Col>
       </Row>
-      {
-        isLoadingData
-          ?
-          <Button variant="success" className="w-100" disabled>
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-              className="me-2"
-            />
-            <span>Loading...</span>
-          </Button>
-          :
-          <Button variant="success" className="w-100" type="submit">Submit</Button>
-      }
-      <div className="p-3 mt-3 w-100 danger-container bg-danger text-center rounded">
-        <Button variant="danger" onClick={handleDeleteUser} >Delete user</Button>
-      </div>
 
     </Form>
   )

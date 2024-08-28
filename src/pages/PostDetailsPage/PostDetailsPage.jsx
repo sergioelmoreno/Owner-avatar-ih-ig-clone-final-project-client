@@ -1,7 +1,7 @@
-import { Col, Container, Row } from "react-bootstrap"
 import heart from './../../assets/heart.svg'
 import heartFill from './../../assets/heart-fill.svg'
 import calendarCheck from './../../assets/calendar-check.svg'
+import { Accordion, Col, Container, Row } from "react-bootstrap"
 import { useEffect, useState } from "react"
 import { Card, Button, Badge, Stack } from "react-bootstrap"
 import { useParams, Link, useNavigate } from "react-router-dom"
@@ -12,6 +12,7 @@ import postsServices from "../../services/posts.services"
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import CardImages from '../../components/CardImages/CardImages'
 import UserInfo from '../../components/UserInfo/UserInfo'
+import CommentForm from "../../components/CommentForm/CommentForm"
 
 const PostDetailsPage = () => {
 
@@ -67,6 +68,14 @@ const PostDetailsPage = () => {
                 {postData.likes.length} <img src={!postData.likes || !postData.likes.length ? heart : heartFill} alt="Like" style={{ width: "20px" }} />
               </span>
             </div>
+            <hr className="my-0" />
+            {
+              loggedUser?._id === postData.owner._id &&
+              <div className='d-flex justify-content-between p-2'>
+                <Button variant='danger' onClick={handleDeletePost} size='sm'>Delete post</Button>
+                <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
+              </div>
+            }
             {
               postData.images && <CardImages images={postData.images} postId={postId} position={null} />
             }
@@ -76,7 +85,9 @@ const PostDetailsPage = () => {
 
               <span className='d-flex align-items-center'>
                 <img src={calendarCheck} alt="Date of the pictures" className='me-2' />
-                {convertDate(postData.date)}
+                <small>
+                  {convertDate(postData.date)}
+                </small>
               </span>
               <Stack direction='horizontal' gap={2}>
                 {
@@ -91,13 +102,25 @@ const PostDetailsPage = () => {
             <Card.Text className="p-3">
               {postData.description}
             </Card.Text>
-            {
-              loggedUser?._id === postData.owner._id &&
-              <Card.Footer className='d-flex justify-content-between'>
-                <Button variant='danger' onClick={handleDeletePost}>Delete post</Button>
-                <Button variant='success' as={Link} to={`/posts/edit/${postId}`} >Edit Post</Button>
-              </Card.Footer>
-            }
+            <hr className="my-0" />
+            <Card.Footer className="py-3 px-0">
+              <p className="px-3">Comments:</p>
+              <Stack>
+                {
+                  loggedUser &&
+                  <Accordion flush data-bs-theme="light">
+                    <Accordion.Item key={0} >
+                      <Accordion.Header>Write a comment</Accordion.Header>
+                      <Accordion.Body>
+                        <CommentForm />
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                }
+              </Stack>
+
+            </Card.Footer>
+
           </Card >
         </Col>
       </Row>

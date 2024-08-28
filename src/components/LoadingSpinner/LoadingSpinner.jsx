@@ -6,7 +6,8 @@ const LoadingSpinner = () => {
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, .6)"
+    backgroundColor: "rgba(0, 0, 0, .6)",
+    zIndex: "999"
   }
 
   return (

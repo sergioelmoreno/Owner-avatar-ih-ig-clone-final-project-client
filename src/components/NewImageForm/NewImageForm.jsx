@@ -24,7 +24,7 @@ const NewImageForm = ({ setImageData, imageData, labelText, max }) => {
   }
 
   return (
-    <Form.Group className="mb-3" controlId="image">
+    <Form.Group className="mb-3">
       {
         labelText &&
         <Form.Label>

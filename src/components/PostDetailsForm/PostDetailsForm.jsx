@@ -1,6 +1,6 @@
 import postsServices from "../../services/posts.services"
 import { useContext, useEffect, useState } from "react"
-import { Form, Row, Col, Button, FormCheck, Spinner } from "react-bootstrap"
+import { Form, Row, Col, Button, FormCheck, Spinner, Stack } from "react-bootstrap"
 import DatePicker from "react-date-picker"
 import { useNavigate, useParams } from "react-router-dom"
 import NewImageForm from "../NewImageForm/NewImageForm"
@@ -116,50 +116,58 @@ const PostDetailsForm = () => {
         {/* TODO: refactor the NewImageForm to show the fetch images  */}
         {/* <NewImageForm setImageData={setImageData} imageData={imageData} /> */}
 
-        <Form.Group as={Col} sm={12} className="mb-3">
-          <Form.Label>Description:</Form.Label>
-          <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
-        </Form.Group>
+        <Col sm={{ span: 12 }}>
+          <Form.Group className="mb-3">
+            <Form.Label>Description:</Form.Label>
+            <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
+          </Form.Group>
+        </Col>
 
-        <Form.Group as={Col} md={4} className="mb-3" controlId="date">
-          <Form.Label>Date*</Form.Label>
-          <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDatePost} required />
-        </Form.Group >
+        <Col md={{ span: 4 }}>
+          <Form.Group className="mb-3">
+            <Form.Label>Date*</Form.Label>
+            <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDatePost} required />
+          </Form.Group >
+        </Col>
 
+        <Col md={{ span: 8 }}>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-3">Categories</Form.Label>
+            <Stack direction="horizontal" gap={3}>
 
-        <Form.Group className="mb-3" as={Col} md={8}>
-          <Form.Label className="mb-3">Categories</Form.Label>
+              <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Food} />
+              <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Technology} />
+              <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Nature} />
+              <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Lifestyle} />
 
-          <FormCheck inline label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Food} />
-          <FormCheck inline label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Technology} />
-          <FormCheck inline label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Nature} />
-          <FormCheck inline label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Lifestyle} />
+            </Stack>
+          </Form.Group>
+        </Col>
 
-        </Form.Group>
+        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+          {
+            isLoadingData
+              ?
+              <Button variant="success" className="w-100" disabled>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                <span>Loading...</span>
+              </Button>
+              :
+              <Button variant="success" className="w-100" type="submit">Submit</Button>
+          }
 
+          <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
+            <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
+          </div>
+        </Col>
       </Row>
-
-      {
-        isLoadingData
-          ?
-          <Button variant="success" className="w-100" disabled>
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-              className="me-2"
-            />
-            <span>Loading...</span>
-          </Button>
-          :
-          <Button variant="success" className="w-100" type="submit">Submit</Button>
-      }
-
-      <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
-        <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
-      </div>
     </Form >
   )
 }

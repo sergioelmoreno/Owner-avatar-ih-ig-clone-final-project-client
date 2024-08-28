@@ -1,5 +1,7 @@
 :root {
   --clr-red: #a92835;
+  --bs-accordion-active-color: var(--bs-success-text-emphasis);
+  --bs-accordion-active-bg: var(--bs-success-bg-subtle);
 }
 
 .react-date-picker__wrapper {
