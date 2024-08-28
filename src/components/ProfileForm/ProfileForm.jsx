@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../contexts/auth.context"
 import authServices from "../../services/auth.services"
 import DatePicker from "react-date-picker"
-import NewImageForm from "../NewImageForm/NewImageForm"
+import UploaderSingleImageForm from '../UploaderSingleImageForm/UploaderSingleImageForm'
 
 const ProfileForm = () => {
 
@@ -19,14 +19,14 @@ const ProfileForm = () => {
     avatar: "",
     country: "",
     phone: "",
-    birth: new Date()
+    birth: ""
   })
 
   const [isLoadingData, setIsLoadingData] = useState(false)
 
   const { loggedUser, logoutUser } = useContext(AuthContext)
 
-  const [imageData, setImageData] = useState([])
+  const [imageData, setImageData] = useState()
 
   const navigate = useNavigate()
 
@@ -49,7 +49,7 @@ const ProfileForm = () => {
     setProfileData({ ...profileData, date })
   }
 
-  const populateImageData = () => {
+  const reloadAvatarImage = () => {
     setProfileData({ ...profileData, avatar: imageData })
   }
 
@@ -74,13 +74,8 @@ const ProfileForm = () => {
       authServices
         .deleteUser(loggedUser._id)
         .then(() => {
-
           logoutUser()
-
-          if (!isLoading) {
-            navigate('/')
-          }
-
+          navigate('/')
         })
         .catch(err => console.log(err))
     }
@@ -96,67 +91,69 @@ const ProfileForm = () => {
   }, [])
 
   useEffect(() => {
-    populateImageData()
+    reloadAvatarImage()
   }, [imageData])
 
   return (
 
-    <Form onSubmit={handleFormSubmit} className="ProfileForm">
+    <Form onSubmit={handleFormSubmit} className="ProfileForm pb-6">
 
       <Row className="mb-3">
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Username:</Form.Label>
-            <Form.Control type="text" defaultValue={nick} name="nick" disabled></Form.Control>
+            <Form.Control type="text" value={nick} name="nick" disabled></Form.Control>
           </Form.Group>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Email:</Form.Label>
-            <Form.Control type="email" defaultValue={email} name="email" disabled />
+            <Form.Control type="email" value={email} name="email" disabled />
           </Form.Group>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>First name:</Form.Label>
             <Form.Control type="text" value={profileData.firstname} name="firstname" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Last name:</Form.Label>
             <Form.Control type="text" value={profileData.lastname} name="lastname" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Country:</Form.Label>
             <Form.Control type="text" value={profileData.country} name="country" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Phone:</Form.Label>
             <Form.Control type="text" value={profileData.phone} name="phone" onChange={handleInputChange} ></Form.Control>
           </Form.Group>
         </Col>
 
-        <Col md={{ span: 6 }} className="d-flex align-items-center justify-content-stretch">
-          {/* TODO: Change the avatar at the loggedUser payload */}
-          <img src={profileData.avatar} alt={profileData.nick} className="user-avatar me-2" />
-          <span className="flex-grow-1">
-            <NewImageForm setImageData={setImageData} imageData={imageData} defaultUrl={profileData.avatar} labelText={'Avatar'} max={1} />
-          </span>
+        <Col md={{ span: 6 }}>
+          <div className="d-flex align-items-center justify-content-stretch mb-3">
+            {/* TODO: Change the avatar at the loggedUser payload */}
+            <img src={profileData.avatar} alt={profileData.nick} className="user-avatar me-2" />
+            <span className="flex-grow-1">
+              <UploaderSingleImageForm setImageData={setImageData} labelText={'Avatar'} />
+            </span>
+          </div>
         </Col>
 
         <Col md={{ span: 6 }}>
-          <Form.Group>
+          <Form.Group className="mb-6">
             <Form.Label>Birthday:</Form.Label>
             <Form.Control as={DatePicker} value={profileData.birth} name="birth" onChange={handleDate} maxDate={maxDate} required />
             <Form.Text className="text-muted">
