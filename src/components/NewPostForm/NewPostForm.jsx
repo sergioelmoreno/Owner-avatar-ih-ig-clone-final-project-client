@@ -3,7 +3,7 @@ import { Form, Row, Col, Button, FormCheck, Stack } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import DatePicker from "react-date-picker"
 import postsServices from "../../services/posts.services"
-import NewImageForm from "../NewImageForm/NewImageForm"
+import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
 
 
 const NewPostForm = () => {
@@ -61,7 +61,7 @@ const NewPostForm = () => {
     <Form onSubmit={handlePostSubmit}>
       <Row className="mb-3">
 
-        <NewImageForm setImageData={setImageData} imageData={imageData} labelText={'Upload max 3 photos'} max={3} />
+        <UploaderMultipleImagesForm setImageData={setImageData} imageData={imageData} labelText={'Upload 3 photos max'} />
 
         <Form.Group as={Col} sm={12} className="mb-3">
           <Form.Label>Description:</Form.Label>

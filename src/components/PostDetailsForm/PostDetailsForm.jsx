@@ -1,11 +1,9 @@
 import postsServices from "../../services/posts.services"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Form, Row, Col, Button, FormCheck, Spinner, Stack } from "react-bootstrap"
 import DatePicker from "react-date-picker"
 import { useNavigate, useParams } from "react-router-dom"
-import NewImageForm from "../NewImageForm/NewImageForm"
-import { AuthContext } from "../../contexts/auth.context"
-
+import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
 
 const PostDetailsForm = () => {
 
@@ -47,6 +45,7 @@ const PostDetailsForm = () => {
         }
 
         setCategoriesClicked({ ...categories })
+
       })
       .catch(err => console.log(err))
   }
@@ -76,13 +75,13 @@ const PostDetailsForm = () => {
       value && categories.push(key)
     }
 
-    const data = { ...postData, categories }
+    const data = { ...postData, images: imageData, categories }
 
     postsServices
       .editPost(postId, data)
       .then(() => {
         setIsLoadingData(false)
-        fetchPostData()
+        navigate(`/posts/post/${postId}`)
       })
       .catch(err => console.log(err))
   }
@@ -97,24 +96,18 @@ const PostDetailsForm = () => {
     }
   }
 
-  const populateImageData = () => {
-    setPostData({ ...postData, images: imageData })
-  }
-
-  useEffect(() => {
-    populateImageData()
-  }, [imageData])
-
   useEffect(() => {
     fetchPostData()
   }, [])
 
   return (
-    <Form onSubmit={handlePostSubmit}>
+    <Form onSubmit={handlePostSubmit} className="PostDetailsForm pb-6" encType="multipart/form-data">
 
       <Row className="mb-3">
-        {/* TODO: refactor the NewImageForm to show the fetch images  */}
-        {/* <NewImageForm setImageData={setImageData} imageData={imageData} /> */}
+
+        {/* TODO: 🔥🔥refactor to show the fetch images and compress before upload (multer storage)*/}
+
+        <UploaderMultipleImagesForm setImageData={setImageData} imageData={postData.images} labelText={'Upload 3 photos max'} />
 
         <Col sm={{ span: 12 }}>
           <Form.Group className="mb-3">

@@ -12,6 +12,10 @@ class UploadServices {
   uploadimage(imageForm) {
     return this.api.post('/image', imageForm)
   }
+
+  uploadimages(imageForm) {
+    return this.api.post('/images', imageForm)
+  }
 }
 
 const uploadServices = new UploadServices()
