@@ -29,6 +29,9 @@ const PostDetailsPage = () => {
     likes: [],
   })
 
+  // TODO: RESEARCH HOW TO FORCE COLLAPSE ON SUBMIT COMMENT
+  const [accordionCollapse, setAccordionCollapse] = useState(false)
+
   const { loggedUser, isLoading } = useContext(AuthContext)
 
   const navigate = useNavigate()
@@ -54,6 +57,9 @@ const PostDetailsPage = () => {
   useEffect(() => {
     fetchPostDetails()
   }, [])
+
+  useEffect(() => setAccordionCollapse(false), [fetchPostDetails])
+
 
   return (
     <Container>
@@ -109,10 +115,10 @@ const PostDetailsPage = () => {
                 {
                   loggedUser &&
                   <Accordion flush data-bs-theme="light">
-                    <Accordion.Item key={0} >
+                    <Accordion.Item eventKey={0} in={accordionCollapse} onClick={() => setAccordionCollapse(!accordionCollapse)}>
                       <Accordion.Header>Write a comment</Accordion.Header>
                       <Accordion.Body>
-                        <CommentForm />
+                        <CommentForm fetchPostDetails={fetchPostDetails} />
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>
