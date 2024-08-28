@@ -1,17 +1,10 @@
+import './LoadingSpinner.css'
 import { Spinner } from "react-bootstrap"
 
 const LoadingSpinner = () => {
 
-  const containerStyle = {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, .6)",
-    zIndex: "999"
-  }
-
   return (
-    <div style={containerStyle} className="d-flex justify-content-center align-items-center">
+    <div className="LoadingSpinner d-flex justify-content-center align-items-center">
       <Spinner />
     </div>
   )
