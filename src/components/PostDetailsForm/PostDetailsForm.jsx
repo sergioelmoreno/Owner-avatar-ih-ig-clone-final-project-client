@@ -1,8 +1,8 @@
-import postsServices from "../../services/posts.services"
 import { useEffect, useState } from "react"
 import { Form, Row, Col, Button, FormCheck, Spinner, Stack } from "react-bootstrap"
-import DatePicker from "react-date-picker"
 import { useNavigate, useParams } from "react-router-dom"
+import postsServices from "../../services/posts.services"
+import DatePicker from "react-date-picker"
 import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
 
 const PostDetailsForm = () => {

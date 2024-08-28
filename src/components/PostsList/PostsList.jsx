@@ -1,11 +1,12 @@
 import './PostsList.css'
 import { useEffect, useState } from "react"
-import postsServices from "../../services/posts.services"
 import { Col, Row } from "react-bootstrap"
+import postsServices from "../../services/posts.services"
 import PostCard from "../PostCard/PostCard"
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 
 const PostList = () => {
+
   const [posts, setPosts] = useState([])
   const [loadingData, setLoadingData] = useState(false)
 

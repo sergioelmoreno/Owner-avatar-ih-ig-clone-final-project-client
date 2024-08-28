@@ -1,5 +1,5 @@
-import PostList from "../../components/PostsList/PostsList"
 import { Container } from "react-bootstrap"
+import PostList from "../../components/PostsList/PostsList"
 
 const PostsPage = () => {
 
