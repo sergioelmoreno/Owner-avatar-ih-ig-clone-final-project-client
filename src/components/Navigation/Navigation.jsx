@@ -22,6 +22,7 @@ const Navigation = () => {
   const handleLogout = e => {
     e.preventDefault()
     logoutUser()
+    handleClose()
     navigate('/')
   }
 
@@ -68,7 +69,7 @@ const Navigation = () => {
                     ?
                     <>
                       <Nav className="me-3">
-                        <Nav.Link as={Link} to={'/posts/new'}>New Post</Nav.Link>
+                        <Nav.Link as={Link} to={'/posts/new'} onClick={handleClose}>New Post</Nav.Link>
                       </Nav>
                       <Nav className="me-3">
                         <Nav.Link as={Link} onClick={handleLogout}>Logout</Nav.Link>
@@ -77,10 +78,10 @@ const Navigation = () => {
                     :
                     <>
                       <Nav className="me-3">
-                        <Nav.Link as={Link} to={'/signup'}>Signup</Nav.Link>
+                        <Nav.Link as={Link} to={'/signup'} onClick={handleClose}>Signup</Nav.Link>
                       </Nav>
                       <Nav>
-                        <Nav.Link as={Link} to={'/login'}>Login</Nav.Link>
+                        <Nav.Link as={Link} to={'/login'} onClick={handleClose}>Login</Nav.Link>
                       </Nav>
                     </>
                 }

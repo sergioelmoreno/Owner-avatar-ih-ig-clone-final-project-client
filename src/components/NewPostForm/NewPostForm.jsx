@@ -33,6 +33,7 @@ const NewPostForm = () => {
 
   const [addressValue, setAddressValue] = useState()
 
+  const categories = ['Lifestyle', 'Shopping', 'Technology', 'Food', 'Music', 'Nature', 'Skyline']
   const navigate = useNavigate()
 
   const GEOCODING_API_KEY = import.meta.env.VITE_GOOGLE_GEOCODING_API_KEY
@@ -114,10 +115,12 @@ const NewPostForm = () => {
           <Form.Group className="mb-3">
             <Form.Label className="mb-3">Categories:</Form.Label>
             <Stack direction="horizontal" gap={3}>
-              <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
-              <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
-              <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
-              <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
+              {
+                categories.map((cat, idx) => {
+                  return <FormCheck key={`cat-${postData._id}-${idx}`} inline id={cat} label={cat} name={cat} type="checkbox" onChange={handleCheckboxChange} />
+                })
+              }
+
             </Stack>
           </Form.Group>
         </Col>
