@@ -87,104 +87,105 @@ const PostDetailsPage = () => {
       <Row>
         <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
 
-          {isLoading && loadingData ?
-            <LoadingSpinner />
-            :
-            <Card className="shadow text-bg-light">
+          {
+            isLoading && loadingData
+              ?
+              <LoadingSpinner />
+              :
+              <Card className="shadow text-bg-light">
 
-              <div className="d-flex justify-content-between p-3">
-                <UserInfo owner={postData.owner} />
+                <div className="d-flex justify-content-between p-3">
+                  <UserInfo owner={postData.owner} />
 
-                {!isLoading && !loadingData && <LikesForm postData={postData} setPostData={setPostData} />}
+                  {!isLoading && !loadingData && <LikesForm postData={postData} setPostData={setPostData} />}
 
-              </div>
-
-              <hr className="my-0" />
-
-              {
-                loggedUser?._id === postData.owner._id &&
-                <div className='d-flex justify-content-between p-2'>
-                  <Button variant='danger' onClick={handleDeletePost} size='sm'>Delete post</Button>
-                  <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
                 </div>
-              }
 
-              {
-                postData.images && <CardImages images={postData.images} postId={postId} position={null} />
-              }
+                <hr className="my-0" />
+
+                {
+                  loggedUser?._id === postData.owner._id &&
+                  <div className='d-flex justify-content-between p-2'>
+                    <Button variant='danger' onClick={handleDeletePost} size='sm'>Delete post</Button>
+                    <Button variant='success' as={Link} to={`/posts/edit/${postId}`} size='sm'>Edit Post</Button>
+                  </div>
+                }
+
+                {
+                  postData.images && <CardImages images={postData.images} postId={postId} position={null} />
+                }
 
 
-              <Card.Subtitle className="d-flex justify-content-between p-3">
+                <Card.Subtitle className="d-flex justify-content-between p-3">
 
-                <span className='d-flex align-items-center'>
-                  <img src={calendarCheck} alt="Date of the pictures" className='me-2' />
-                  <small>
-                    {convertDate(postData.date)}
-                  </small>
-                </span>
+                  <span className='d-flex align-items-center'>
+                    <img src={calendarCheck} alt="Date of the pictures" className='me-2' />
+                    <small>
+                      {convertDate(postData.date)}
+                    </small>
+                  </span>
 
-                <Stack direction='horizontal' gap={2}>
-                  {
-                    postData.categories.map((cat, idx) => {
-                      return <Badge key={`${postData._id}-${idx}`} bg="secondary">{cat}</Badge>
-                    })
-                  }
-
-                </Stack>
-
-              </Card.Subtitle>
-
-              <Card.Text className="p-3">
-                {postData.description}
-              </Card.Text>
-
-              <Accordion flush data-bs-theme="light">
-                <Accordion.Item eventKey={1}>
-                  <Accordion.Header>
-
-                    <span className='d-flex align-items-center'>
-                      <img src={geoAltFill} alt="Location" className='me-2' />
-                      <small>
-                        {postData.address}
-                      </small>
-                    </span>
-
-                  </Accordion.Header>
-                  <Accordion.Body className='p-0'>
+                  <Stack direction='horizontal' gap={2}>
                     {
-                      !loadingData && <GoogleMap lng={postData.location.coordinates[0]} lat={postData.location.coordinates[1]} />
+                      postData.categories.map((cat, idx) => {
+                        return <Badge key={`${postData._id}-${idx}`} bg="secondary">{cat}</Badge>
+                      })
                     }
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
 
-              <hr className="my-0" />
+                  </Stack>
 
-              <Card.Footer className="py-3 px-0">
+                </Card.Subtitle>
 
-                <Stack>
-                  {
-                    loggedUser &&
-                    <Accordion flush data-bs-theme="light">
-                      <Accordion.Item eventKey={0}>
-                        <Accordion.Header>
-                          <span className='me-3'><img src={pencilSquare} alt="Write a comment" /></span>
-                          <span><strong>Write a comment</strong></span>
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <CommentForm fetchCommentsDetails={fetchCommentsDetails} />
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </Accordion>
-                  }
-                </Stack>
+                <Card.Text className="p-3">
+                  {postData.description}
+                </Card.Text>
 
-                <CommentsList postId={postId} fetchCommentsDetails={fetchCommentsDetails} commentsData={commentsData} />
+                <Accordion flush data-bs-theme="light">
+                  <Accordion.Item eventKey={1}>
+                    <Accordion.Header>
 
-              </Card.Footer>
+                      <span className='d-flex align-items-center'>
+                        <img src={geoAltFill} alt="Location" className='me-2' />
+                        <small>
+                          {postData.address}
+                        </small>
+                      </span>
 
-            </Card >
+                    </Accordion.Header>
+                    <Accordion.Body className='p-0'>
+                      {
+                        !loadingData && <GoogleMap lng={postData.location.coordinates[0]} lat={postData.location.coordinates[1]} />
+                      }
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
 
+                <hr className="my-0" />
+
+                <Card.Footer className="py-3 px-0">
+
+                  <Stack>
+                    {
+                      loggedUser &&
+                      <Accordion flush data-bs-theme="light">
+                        <Accordion.Item eventKey={0}>
+                          <Accordion.Header>
+                            <span className='me-3'><img src={pencilSquare} alt="Write a comment" /></span>
+                            <span><strong>Write a comment</strong></span>
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <CommentForm fetchCommentsDetails={fetchCommentsDetails} />
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                    }
+                  </Stack>
+
+                  <CommentsList postId={postId} fetchCommentsDetails={fetchCommentsDetails} commentsData={commentsData} />
+
+                </Card.Footer>
+
+              </Card >
           }
 
         </Col>

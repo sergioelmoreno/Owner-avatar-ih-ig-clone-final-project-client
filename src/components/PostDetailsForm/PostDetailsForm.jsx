@@ -5,26 +5,26 @@ import postsServices from "../../services/posts.services"
 import DatePicker from "react-date-picker"
 import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete"
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner"
 
 const PostDetailsForm = () => {
 
   const { postId } = useParams()
 
-  const [postData, setPostData] = useState({
-    images: [],
-    description: '',
-    categories: [],
-    date: new Date()
-  })
+  const [isLoadingData, setIsLoadingData] = useState(true)
+
+  const [postData, setPostData] = useState()
 
   const [categoriesClicked, setCategoriesClicked] = useState({
     Food: false,
     Nature: false,
     Technology: false,
-    Lifestyle: false
+    Lifestyle: false,
+    Shopping: false,
+    Music: false,
+    Skyline: false
   })
 
-  const [isLoadingData, setIsLoadingData] = useState(false)
 
   const [addressData, setAddressData] = useState({
     address: undefined,
@@ -45,6 +45,7 @@ const PostDetailsForm = () => {
     postsServices
       .getPost(postId)
       .then(({ data }) => {
+        console.log(data)
         setPostData({ ...data })
 
         const categories = { ...categoriesClicked }
@@ -56,6 +57,7 @@ const PostDetailsForm = () => {
         }
 
         setCategoriesClicked({ ...categories })
+        setIsLoadingData(false)
 
       })
       .catch(err => console.log(err))
@@ -98,12 +100,15 @@ const PostDetailsForm = () => {
     }
 
     const data = {
-      ...postData,
+      comments: postData.comments,
+      likes: postData.likes,
+      description: postData.description,
+      date: postData.date,
       images: imageData.length > 0 ? [...imageData] : postData.images,
       categories,
-      longitude: addressData.longitude,
-      latitude: addressData.latitude,
-      address: addressValue.label
+      longitude: !addressValue ? postData.location.coordinates[0] : addressData.longitude,
+      latitude: !addressValue ? postData.location.coordinates[1] : addressData.latitude,
+      address: !addressValue ? postData.address : addressValue.label
     }
 
     postsServices
@@ -134,109 +139,117 @@ const PostDetailsForm = () => {
   }, [addressValue])
 
   return (
-    <Form onSubmit={handlePostSubmit} className="PostDetailsForm pb-6" encType="multipart/form-data">
+    <>
+      {
+        isLoadingData
+          ?
+          <LoadingSpinner />
+          :
+          <Form onSubmit={handlePostSubmit} className="PostDetailsForm pb-6" encType="multipart/form-data">
 
-      <Row className="mb-3">
+            <Row className="mb-3">
 
-        {/* TODO: 🔥🔥refactor to show the fetch images and compress before upload (multer storage)*/}
+              {/* TODO: 🔥🔥refactor to show the fetch images and compress before upload (multer storage)*/}
 
-        <UploaderMultipleImagesForm setImageData={setImageData} imageData={postData.images} labelText={'Upload 3 photos max'} />
+              < UploaderMultipleImagesForm setImageData={setImageData} imageData={postData.images} labelText={'Upload 3 photos max'} />
 
-        <Col sm={{ span: 12 }}>
-          <Form.Group className="mb-3">
-            <Form.Label>Description:</Form.Label>
-            <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
-          </Form.Group>
-        </Col>
+              <Col sm={{ span: 12 }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Description:</Form.Label>
+                  <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
+                </Form.Group>
+              </Col>
 
-        <Col md={{ span: 4 }}>
-          <Form.Group className="mb-3">
-            <Form.Label>Date*</Form.Label>
-            <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDatePost} required />
-          </Form.Group >
-        </Col>
+              <Col md={{ span: 4 }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Date*</Form.Label>
+                  <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDatePost} required />
+                </Form.Group >
+              </Col>
 
-        <Col md={{ span: 8 }}>
-          <Form.Group className="mb-3">
-            <Form.Label className="mb-3">Categories</Form.Label>
-            <Stack direction="horizontal" gap={3}>
+              <Col md={{ span: 8 }}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="mb-3">Categories</Form.Label>
+                  <Stack direction="horizontal" gap={3}>
 
-              <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Food} />
-              <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Technology} />
-              <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Nature} />
-              <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Lifestyle} />
+                    {
+                      Object.keys(categoriesClicked).map((cat, idx) => {
+                        return <FormCheck key={`cat-${postData._id}-${idx}`} inline id={cat} label={cat} name={cat} type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked[cat]} />
+                      })
+                    }
 
-            </Stack>
-          </Form.Group>
-        </Col>
+                  </Stack>
+                </Form.Group>
+              </Col>
 
-        <Col md={{ span: 12 }}>
-          <Form.Group className="mb-3">
-            <Form.Label className="mb-3">Direction:</Form.Label>
-            <GooglePlacesAutocomplete selectProps={{
-              styles: {
-                control: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#212529',
-                  borderColor: '#495057'
-                }),
-                input: (provided) => ({
-                  ...provided,
-                  color: '#fff',
-                }),
-                option: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#212529',
-                  color: '#fff',
-                }),
-                singleValue: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#212529',
-                  color: '#fff',
-                }),
-                menu: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#212529',
-                  border: 'solid 1px #495057',
-                  color: '#fff',
-                }),
-              },
-              addressValue,
-              onChange: setAddressValue
-            }}
-              apiKey={GEOCODING_API_KEY}
-            />
-          </Form.Group>
-        </Col>
+              <Col md={{ span: 12 }}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="mb-3">Direction:</Form.Label>
+                  <GooglePlacesAutocomplete selectProps={{
+                    styles: {
+                      control: (provided) => ({
+                        ...provided,
+                        backgroundColor: '#212529',
+                        borderColor: '#495057'
+                      }),
+                      input: (provided) => ({
+                        ...provided,
+                        color: '#fff',
+                      }),
+                      option: (provided) => ({
+                        ...provided,
+                        backgroundColor: '#212529',
+                        color: '#fff',
+                      }),
+                      singleValue: (provided) => ({
+                        ...provided,
+                        backgroundColor: '#212529',
+                        color: '#fff',
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        backgroundColor: '#212529',
+                        border: 'solid 1px #495057',
+                        color: '#fff',
+                      }),
+                    },
+                    addressValue,
+                    onChange: setAddressValue
+                  }}
+                    apiKey={GEOCODING_API_KEY}
+                  />
+                </Form.Group>
+              </Col>
 
-        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+              <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
 
-          {
-            isLoadingData
-              ?
-              <Button variant="success" className="w-100" disabled>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                  className="me-2"
-                />
-                <span>Loading...</span>
-              </Button>
-              :
-              <Button variant="success" className="w-100" type="submit">Submit</Button>
-          }
+                {
+                  isLoadingData
+                    ?
+                    <Button variant="success" className="w-100" disabled>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="me-2"
+                      />
+                      <span>Loading...</span>
+                    </Button>
+                    :
+                    <Button variant="success" className="w-100" type="submit">Submit</Button>
+                }
 
-        </Col>
-      </Row>
+              </Col>
+            </Row>
 
-      <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
-        <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
-      </div>
-
-    </Form >
+            <div className="p-3 mt-3 danger-container bg-danger text-center rounded w-100" >
+              <Button variant="danger" onClick={handleDeletePost} >Delete Post</Button>
+            </div>
+          </Form >
+      }
+    </>
   )
 }
 
