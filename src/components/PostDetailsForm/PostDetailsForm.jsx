@@ -99,7 +99,7 @@ const PostDetailsForm = () => {
 
     const data = {
       ...postData,
-      images: [...imageData],
+      images: imageData.length > 0 ? [...imageData] : postData.images,
       categories,
       longitude: addressData.longitude,
       latitude: addressData.latitude,
