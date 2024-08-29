@@ -54,7 +54,7 @@ const LikesForm = ({ postData, setPostData }) => {
   return (
     <span className={`likes d-flex align-items-center gap-2 ${loggedUser && 'clickable'}`} onClick={loggedUser && handleLikes}>
       {idArr?.length}
-      <img src={!idArr || !idArr.length ? heart : heartFill} alt="Like" style={{ width: "20px" }} />
+      <img src={!idArr || !idArr.length || !idArr.includes(userId) ? heart : heartFill} alt="Like" style={{ width: "20px" }} />
     </span>
   )
 }
