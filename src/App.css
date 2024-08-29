@@ -4,6 +4,27 @@
   --bs-accordion-active-bg: var(--bs-success-bg-subtle);
 }
 
+body {
+  background: linear-gradient(-45deg, #3a0168, #5b014a, #700058, #4f0088);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .pb-6 {
   padding-bottom: 6rem;
 }
@@ -68,4 +89,12 @@
 
 .likes.clickable:hover {
   cursor: pointer;
+}
+
+.external-link,
+.external-link:hover,
+.external-link:active,
+.external-link:visited {
+  color: #FFF;
+  text-decoration: none;
 }
