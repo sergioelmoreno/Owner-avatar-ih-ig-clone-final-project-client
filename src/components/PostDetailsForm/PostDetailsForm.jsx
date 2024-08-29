@@ -149,8 +149,6 @@ const PostDetailsForm = () => {
 
             <Row className="mb-3">
 
-              {/* TODO: 🔥🔥refactor to show the fetch images and compress before upload (multer storage)*/}
-
               < UploaderMultipleImagesForm setImageData={setImageData} imageData={postData.images} labelText={'Upload 3 photos max'} />
 
               <Col sm={{ span: 12 }}>

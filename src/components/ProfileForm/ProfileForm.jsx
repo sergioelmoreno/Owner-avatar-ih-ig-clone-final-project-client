@@ -143,13 +143,14 @@ const ProfileForm = () => {
         </Col>
 
         <Col md={{ span: 6 }}>
+
           <div className="d-flex align-items-center justify-content-stretch mb-3">
-            {/* TODO: Change the avatar at the loggedUser payload */}
             <img src={profileData.avatar} alt={profileData.nick} className="user-avatar me-2" />
             <span className="flex-grow-1">
               <UploaderSingleImageForm setImageData={setImageData} labelText={'Avatar'} />
             </span>
           </div>
+
         </Col>
 
         <Col md={{ span: 6 }}>

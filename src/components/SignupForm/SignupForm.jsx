@@ -110,7 +110,7 @@ const SignupForm = () => {
 
         <Col md={{ span: 6, offset: 3 }}>
           <div className="d-flex align-items-center justify-content-stretch mb-3">
-            {/* TODO: Change the avatar at the loggedUser payload */}
+
             <img src={signupData.avatar} alt={signupData.nick} className="user-avatar me-2" />
             <span className="flex-grow-1">
               <UploaderSingleImageForm setImageData={setImageData} labelText={'Avatar'} />
