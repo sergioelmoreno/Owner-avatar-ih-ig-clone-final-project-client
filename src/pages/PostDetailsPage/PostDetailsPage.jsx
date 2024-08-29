@@ -37,14 +37,14 @@ const PostDetailsPage = () => {
 
   const [commentsData, getCommentsData] = useState([])
 
-  const [loadingData, setLoadingData] = useState(false)
+  const [loadingData, setLoadingData] = useState(true)
 
   const { loggedUser, isLoading } = useContext(AuthContext)
 
   const navigate = useNavigate()
 
   const fetchPostDetails = () => {
-    setLoadingData(true)
+
     postsServices
       .getPost(postId)
       .then(({ data }) => {
@@ -152,7 +152,7 @@ const PostDetailsPage = () => {
                   </Accordion.Header>
                   <Accordion.Body className='p-0'>
                     {
-                      !isLoading && !loadingData && <GoogleMap lng={postData.location.coordinates[0]} lat={postData.location.coordinates[1]} />
+                      !loadingData && <GoogleMap lng={postData.location.coordinates[0]} lat={postData.location.coordinates[1]} />
                     }
                   </Accordion.Body>
                 </Accordion.Item>
