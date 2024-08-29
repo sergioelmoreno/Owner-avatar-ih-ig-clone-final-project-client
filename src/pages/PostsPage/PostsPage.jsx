@@ -5,7 +5,7 @@ const PostsPage = () => {
 
   return (
     <Container>
-      <h1>Welcome PhotoGram!</h1>
+      <h1>Welcome to Aperture!</h1>
       <hr />
       <PostList />
     </Container>
