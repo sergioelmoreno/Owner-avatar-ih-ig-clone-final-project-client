@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vis.gl/react-google-maps": "^1.1.0",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
     "masonry-layout": "^4.2.2",
@@ -17,6 +18,7 @@
     "react-bootstrap": "^2.10.4",
     "react-date-picker": "^11.0.0",
     "react-dom": "^18.3.1",
+    "react-google-places-autocomplete": "^4.1.0",
     "react-router-dom": "^6.26.1"
   },
   "devDependencies": {

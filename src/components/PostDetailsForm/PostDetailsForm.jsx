@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import postsServices from "../../services/posts.services"
 import DatePicker from "react-date-picker"
 import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete"
 
 const PostDetailsForm = () => {
 
@@ -25,9 +26,19 @@ const PostDetailsForm = () => {
 
   const [isLoadingData, setIsLoadingData] = useState(false)
 
+  const [addressData, setAddressData] = useState({
+    address: undefined,
+    latitude: 0,
+    longitude: 0
+  })
+
+  const [addressValue, setAddressValue] = useState()
+
   const [imageData, setImageData] = useState([])
 
   const navigate = useNavigate()
+
+  const GEOCODING_API_KEY = import.meta.env.VITE_GOOGLE_GEOCODING_API_KEY
 
   const fetchPostData = () => {
 
@@ -64,6 +75,17 @@ const PostDetailsForm = () => {
     setPostData({ ...postData, date })
   }
 
+  const handleAutocomplete = () => {
+    addressValue?.label && geocodeByAddress(addressValue?.label)
+      .then(([addressDetails]) => {
+        return getLatLng(addressDetails)
+      })
+      .then((coordinates) => {
+        setAddressData({ ...addressData, latitude: coordinates.lat, longitude: coordinates.lng })
+      })
+      .catch(error => console.error(error))
+  }
+
   const handlePostSubmit = e => {
     e.preventDefault()
 
@@ -75,7 +97,14 @@ const PostDetailsForm = () => {
       value && categories.push(key)
     }
 
-    const data = { ...postData, images: imageData, categories }
+    const data = {
+      ...postData,
+      images: [...imageData],
+      categories,
+      longitude: addressData.longitude,
+      latitude: addressData.latitude,
+      address: addressValue.label
+    }
 
     postsServices
       .editPost(postId, data)
@@ -99,6 +128,10 @@ const PostDetailsForm = () => {
   useEffect(() => {
     fetchPostData()
   }, [])
+
+  useEffect(() => {
+    handleAutocomplete()
+  }, [addressValue])
 
   return (
     <Form onSubmit={handlePostSubmit} className="PostDetailsForm pb-6" encType="multipart/form-data">
@@ -134,6 +167,45 @@ const PostDetailsForm = () => {
               <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} checked={categoriesClicked.Lifestyle} />
 
             </Stack>
+          </Form.Group>
+        </Col>
+
+        <Col md={{ span: 12 }}>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-3">Direction:</Form.Label>
+            <GooglePlacesAutocomplete selectProps={{
+              styles: {
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  borderColor: '#495057'
+                }),
+                input: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                }),
+                option: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  color: '#fff',
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  color: '#fff',
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  border: 'solid 1px #495057',
+                  color: '#fff',
+                }),
+              },
+              addressValue,
+              onChange: setAddressValue
+            }}
+              apiKey={GEOCODING_API_KEY}
+            />
           </Form.Group>
         </Col>
 

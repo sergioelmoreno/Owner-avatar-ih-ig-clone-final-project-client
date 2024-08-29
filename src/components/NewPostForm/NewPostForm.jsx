@@ -1,9 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Form, Row, Col, Button, FormCheck, Stack } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import DatePicker from "react-date-picker"
 import postsServices from "../../services/posts.services"
 import UploaderMultipleImagesForm from "../UploaderMultipleImagesForm/UploaderMultipleImagesForm"
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete"
 
 
 const NewPostForm = () => {
@@ -24,6 +25,18 @@ const NewPostForm = () => {
 
   const [imageData, setImageData] = useState([])
 
+  const [addressData, setAddressData] = useState({
+    address: undefined,
+    latitude: 0,
+    longitude: 0
+  })
+
+  const [addressValue, setAddressValue] = useState()
+
+  const navigate = useNavigate()
+
+  const GEOCODING_API_KEY = import.meta.env.VITE_GOOGLE_GEOCODING_API_KEY
+
   const handleInputChange = e => {
     const { value, name } = e.target
     setPostData({ ...postData, [name]: value })
@@ -38,7 +51,16 @@ const NewPostForm = () => {
     setPostData({ ...postData, date })
   }
 
-  const navigate = useNavigate()
+  const handleAutocomplete = () => {
+    addressValue?.label && geocodeByAddress(addressValue?.label)
+      .then(([addressDetails]) => {
+        return getLatLng(addressDetails)
+      })
+      .then((coordinates) => {
+        setAddressData({ ...addressData, latitude: coordinates.lat, longitude: coordinates.lng })
+      })
+      .catch(error => console.error(error))
+  }
 
   const handlePostSubmit = e => {
     e.preventDefault()
@@ -49,7 +71,14 @@ const NewPostForm = () => {
       value && categories.push(key)
     }
 
-    const data = { ...postData, images: [...imageData], categories }
+    const data = {
+      ...postData,
+      images: [...imageData],
+      categories,
+      longitude: addressData.longitude,
+      latitude: addressData.latitude,
+      address: addressValue.label
+    }
 
     postsServices
       .savePost(data)
@@ -57,34 +86,82 @@ const NewPostForm = () => {
       .catch(err => console.log(err))
   }
 
+  useEffect(() => {
+    handleAutocomplete()
+  }, [addressValue])
+
   return (
     <Form onSubmit={handlePostSubmit}>
       <Row className="mb-3">
 
         <UploaderMultipleImagesForm setImageData={setImageData} imageData={imageData} labelText={'Upload 3 photos max'} />
 
-        <Form.Group as={Col} sm={12} className="mb-3">
-          <Form.Label>Description:</Form.Label>
-          <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
-        </Form.Group>
+        <Col sm={{ span: 12 }}>
+          <Form.Group className="mb-3">
+            <Form.Label>Description*:</Form.Label>
+            <Form.Control className="mb-2" rows={3} as="textarea" value={postData.description} name="description" onChange={handleInputChange} required />
+          </Form.Group>
+        </Col>
 
-        <Form.Group as={Col} md={4} className="mb-3">
-          <Form.Label>Date*</Form.Label>
-          <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDate} required />
-        </Form.Group >
+        <Col md={{ span: 4 }}>
+          <Form.Group className="mb-3">
+            <Form.Label>Date:*</Form.Label>
+            <Form.Control as={DatePicker} value={postData.date} name="date" onChange={handleDate} required />
+          </Form.Group >
+        </Col>
 
+        <Col md={{ span: 8 }}>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-3">Categories:</Form.Label>
+            <Stack direction="horizontal" gap={3}>
+              <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
+              <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
+              <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
+              <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
+            </Stack>
+          </Form.Group>
+        </Col>
 
-        <Form.Group className="mb-3" as={Col} md={8}>
-          <Form.Label className="mb-3">Categories</Form.Label>
-          <Stack direction="horizontal" gap={3}>
-            <FormCheck inline id="Food" label="Food" name="Food" type="checkbox" onChange={handleCheckboxChange} />
-            <FormCheck inline id="Technology" label="Technology" name="Technology" type="checkbox" onChange={handleCheckboxChange} />
-            <FormCheck inline id="Nature" label="Nature" name="Nature" type="checkbox" onChange={handleCheckboxChange} />
-            <FormCheck inline id="Lifestyle" label="Lifestyle" name="Lifestyle" type="checkbox" onChange={handleCheckboxChange} />
-          </Stack>
-        </Form.Group>
+        <Col md={{ span: 12 }}>
+          <Form.Group className="mb-3">
+            <Form.Label className="mb-3">Direction:</Form.Label>
+            <GooglePlacesAutocomplete selectProps={{
+              styles: {
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  borderColor: '#495057'
+                }),
+                input: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                }),
+                option: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  color: '#fff',
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  color: '#fff',
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#212529',
+                  border: 'solid 1px #495057',
+                  color: '#fff',
+                }),
+              },
+              addressValue,
+              onChange: setAddressValue
+            }}
+              apiKey={GEOCODING_API_KEY}
+            />
+          </Form.Group>
+        </Col>
 
-        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }} className='mt-3'>
+        <Col md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
           <Button variant="success" type="submit" className="w-100">Create new post</Button>
         </Col>
 
