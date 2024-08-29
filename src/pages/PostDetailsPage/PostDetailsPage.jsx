@@ -1,5 +1,6 @@
 import pencilSquare from './../../assets/pencil-square.svg'
 import calendarCheck from './../../assets/calendar-check.svg'
+import geoAltFill from './../../assets/geo-alt-fill.svg'
 import { Accordion, Col, Container, Row } from "react-bootstrap"
 import { useEffect, useState } from "react"
 import { Card, Button, Badge, Stack } from "react-bootstrap"
@@ -15,6 +16,7 @@ import CommentForm from "../../components/CommentForm/CommentForm"
 import CommentsList from '../../components/CommentsList/CommentsList'
 import commentsServices from '../../services/comments.services'
 import LikesForm from '../../components/Likesform/LikesForm'
+import GoogleMap from '../../components/GoogleMap/GoogleMap'
 
 const PostDetailsPage = () => {
 
@@ -29,13 +31,13 @@ const PostDetailsPage = () => {
     comments: [],
     categories: [],
     likes: [],
+    address: "",
+    location: {}
   })
 
   const [commentsData, getCommentsData] = useState([])
 
   const [loadingData, setLoadingData] = useState(false)
-  // TODO: RESEARCH HOW TO FORCE COLLAPSE ON SUBMIT COMMENT
-  //const [accordionCollapse, setAccordionCollapse] = useState(false)
 
   const { loggedUser, isLoading } = useContext(AuthContext)
 
@@ -120,6 +122,7 @@ const PostDetailsPage = () => {
                     {convertDate(postData.date)}
                   </small>
                 </span>
+
                 <Stack direction='horizontal' gap={2}>
                   {
                     postData.categories.map((cat, idx) => {
@@ -134,6 +137,26 @@ const PostDetailsPage = () => {
               <Card.Text className="p-3">
                 {postData.description}
               </Card.Text>
+
+              <Accordion flush data-bs-theme="light">
+                <Accordion.Item eventKey={1}>
+                  <Accordion.Header>
+
+                    <span className='d-flex align-items-center'>
+                      <img src={geoAltFill} alt="Location" className='me-2' />
+                      <small>
+                        {postData.address}
+                      </small>
+                    </span>
+
+                  </Accordion.Header>
+                  <Accordion.Body className='p-0'>
+                    {
+                      !isLoading && !loadingData && <GoogleMap lng={postData.location.coordinates[0]} lat={postData.location.coordinates[1]} />
+                    }
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
 
               <hr className="my-0" />
 
