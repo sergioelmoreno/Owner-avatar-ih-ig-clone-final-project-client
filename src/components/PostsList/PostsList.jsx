@@ -38,7 +38,7 @@ const PostList = () => {
   }, [])
 
   return (
-    <Row data-masonry='{"percentPosition": true }'>
+    <Row>
       <>
         {
           loadingData

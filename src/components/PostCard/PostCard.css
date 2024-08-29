@@ -1,3 +1,4 @@
-.cardImage {
+.imageCard {
   object-fit: cover;
+  aspect-ratio: 16/9;
 }
